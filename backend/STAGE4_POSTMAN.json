@@ -1,0 +1,346 @@
+{
+  "info": {
+    "name": "FreshBit API - Stage 4 Drive & College",
+    "description": "Drive and College management endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "companyToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "collegeToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "driveId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "collegeId1",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "collegeId2",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Company - Drive Management",
+      "item": [
+        {
+          "name": "Login as Company",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.token) {",
+                  "        pm.collectionVariables.set('companyToken', response.data.token);",
+                  "        console.log('Company token saved');",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"hr@google.com\",\n  \"password\": \"google123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Create Drive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.id) {",
+                  "        pm.collectionVariables.set('driveId', response.data.id);",
+                  "        console.log('Drive ID saved:', response.data.id);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{companyToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roleTitle\": \"Senior Software Engineer\",\n  \"salary\": 2000000,\n  \"description\": \"We are hiring talented senior software engineers with 5+ years experience in full-stack development. Must have strong knowledge of React, Node.js, and PostgreSQL.\",\n  \"collegeIds\": [\n    \"{{collegeId1}}\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/company/drives",
+              "host": ["{{baseUrl}}"],
+              "path": ["company", "drives"]
+            }
+          }
+        },
+        {
+          "name": "Get All Company Drives",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{companyToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/company/drives",
+              "host": ["{{baseUrl}}"],
+              "path": ["company", "drives"]
+            }
+          }
+        },
+        {
+          "name": "Get Specific Drive",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{companyToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/company/drives/{{driveId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["company", "drives", "{{driveId}}"]
+            }
+          }
+        },
+        {
+          "name": "Publish Drive",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{companyToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/company/drives/{{driveId}}/publish",
+              "host": ["{{baseUrl}}"],
+              "path": ["company", "drives", "{{driveId}}", "publish"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "College - Profile & Drives",
+      "item": [
+        {
+          "name": "Login as College",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.token) {",
+                  "        pm.collectionVariables.set('collegeToken', response.data.token);",
+                  "        console.log('College token saved');",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@mit.edu\",\n  \"password\": \"mit123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get College Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collegeToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/college/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["college", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Update College Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collegeToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Massachusetts Institute of Technology\",\n  \"tier\": \"Tier 1\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/college/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["college", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Get Assigned Drives",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collegeToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/college/drives",
+              "host": ["{{baseUrl}}"],
+              "path": ["college", "drives"]
+            }
+          }
+        },
+        {
+          "name": "Get Drive Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{collegeToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/college/drives/{{driveId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["college", "drives", "{{driveId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Setup - Get College IDs",
+      "item": [
+        {
+          "name": "Register College 1 (MIT)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.college && response.data.college.id) {",
+                  "        pm.collectionVariables.set('collegeId1', response.data.college.id);",
+                  "        console.log('College 1 ID saved:', response.data.college.id);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"MIT\",\n  \"email\": \"admin@mit.edu\",\n  \"password\": \"mit123\",\n  \"domain\": \"mit.edu\",\n  \"city\": \"Cambridge\",\n  \"state\": \"Massachusetts\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register/college",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register", "college"]
+            }
+          }
+        },
+        {
+          "name": "Note: Approve College via Admin",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "info": {
+    "name": "FreshBit API - Stage 3 Auth",
+    "description": "Authentication & Authorization endpoints for FreshBit Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register Company",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Tech Corp\",\n  \"email\": \"company@techcorp.com\",\n  \"password\": \"password123\",\n  \"domain\": \"techcorp.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register/company",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register", "company"]
+            }
+          }
+        },
+        {
+          "name": "Register College",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"MIT\",\n  \"email\": \"college@mit.edu\",\n  \"password\": \"password123\",\n  \"domain\": \"mit.edu\",\n  \"city\": \"Cambridge\",\n  \"state\": \"Massachusetts\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register/college",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register", "college"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.token) {",
+                  "        pm.collectionVariables.set('token', response.data.token);",
+                  "        console.log('Token saved to collection variable');",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@freshbit.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Approve User (Admin Only)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/admin/approve/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "admin", "approve", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "paste-user-id-here"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:5000/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": [""]
+        }
+      }
+    }
+  ]
+}

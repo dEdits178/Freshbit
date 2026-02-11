@@ -47,6 +47,17 @@ enum FileType {
   FINAL_LIST
 }
 
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum ManagedBy {
+  COLLEGE
+  ADMIN
+}
+
 model User {
   id        String     @id @default(uuid())
   email     String     @unique
@@ -111,12 +122,15 @@ model Drive {
 }
 
 model DriveCollege {
-  id        String   @id @default(uuid())
-  driveId   String
-  collegeId String
-  drive     Drive    @relation(fields: [driveId], references: [id])
-  college   College  @relation(fields: [collegeId], references: [id])
-  createdAt DateTime @default(now())
+  id               String           @id @default(uuid())
+  driveId          String
+  collegeId        String
+  invitationStatus InvitationStatus @default(PENDING)
+  managedBy        ManagedBy?
+  startedAt        DateTime?
+  drive            Drive            @relation(fields: [driveId], references: [id])
+  college          College          @relation(fields: [collegeId], references: [id])
+  createdAt        DateTime         @default(now())
 
   @@unique([driveId, collegeId])
   @@index([driveId])
@@ -190,4 +204,3 @@ model AuditLog {
 
   @@index([actorId])
 }
-

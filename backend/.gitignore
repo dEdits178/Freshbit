@@ -1,0 +1,21 @@
+# Environment variables (NEVER commit this!)
+.env
+
+# Dependencies
+node_modules/
+
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
