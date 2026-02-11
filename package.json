@@ -1,0 +1,14 @@
+{
+  "name": "freshbit-platform",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "echo Monorepo initialized",
+    "build": "echo Build placeholders",
+    "lint": "echo Lint placeholders"
+  }
+}
