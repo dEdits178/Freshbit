@@ -12,7 +12,12 @@ const authenticate = asyncHandler(async (req, res, next) => {
 
   const token = authHeader.split(' ')[1]
 
-  const decoded = verifyToken(token)
+  let decoded
+  try {
+    decoded = verifyToken(token)
+  } catch (error) {
+    throw new AppError('Invalid or expired token', 401)
+  }
 
   const user = await prisma.user.findUnique({
     where: { id: decoded.userId },

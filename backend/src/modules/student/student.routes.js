@@ -14,6 +14,28 @@ const validateConfirmBody = asyncHandler(async (req, res, next) => {
   if (!Array.isArray(students) || students.length === 0) {
     throw new AppError('students must be a non-empty array', 400)
   }
+  
+  // Validate each student
+  for (const student of students) {
+    if (!student.firstName || typeof student.firstName !== 'string' || student.firstName.trim() === '') {
+      throw new AppError('Student firstName is required and must be non-empty', 400)
+    }
+    
+    if (!student.lastName || typeof student.lastName !== 'string' || student.lastName.trim() === '') {
+      throw new AppError('Student lastName is required and must be non-empty', 400)
+    }
+    
+    if (!student.email || typeof student.email !== 'string' || student.email.trim() === '') {
+      throw new AppError('Student email is required and must be non-empty', 400)
+    }
+    
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(student.email)) {
+      throw new AppError(`Invalid email format: ${student.email}`, 400)
+    }
+  }
+  
   next()
 })
 
