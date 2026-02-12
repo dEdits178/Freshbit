@@ -3,6 +3,7 @@ const cors = require('cors')
 const authRoutes = require('./modules/auth/auth.routes')
 const driveRoutes = require('./modules/drive/drive.routes')
 const collegeRoutes = require('./modules/college/college.routes')
+const fileRoutes = require('./modules/file/file.routes')
 const errorHandler = require('./middleware/error.middleware')
 
 const app = express()
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes)
 app.use('/api/drives', driveRoutes)
 app.use('/api/college', collegeRoutes)
+app.use('/api', fileRoutes)
 
 // Error handling middleware (must be last)
 app.use(errorHandler)

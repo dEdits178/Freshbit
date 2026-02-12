@@ -70,6 +70,7 @@ model User {
   company   Company?   @relation("UserCompany")
   college   College?   @relation("UserCollege")
   auditLogs AuditLog[]
+  fileUploadsUploaded FileUpload[]
 }
 
 model Company {
@@ -187,10 +188,16 @@ model FileUpload {
   college      College? @relation(fields: [collegeId], references: [id])
   fileType     FileType
   fileUrl      String
+  fileName     String
+  fileSize     Int
+  mimeType     String
+  uploadedByUserId String
+  uploadedBy   User     @relation(fields: [uploadedByUserId], references: [id])
   createdAt    DateTime @default(now())
 
   @@index([driveId])
   @@index([collegeId])
+  @@index([uploadedByUserId])
 }
 
 model AuditLog {
