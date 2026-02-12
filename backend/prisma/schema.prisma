@@ -98,6 +98,7 @@ model College {
   students      Student[]
   stages        DriveStage[]
   fileUploads   FileUpload[]
+  driveStudents DriveStudent[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }
@@ -117,6 +118,7 @@ model Drive {
   applications  Application[]
   stages        DriveStage[]
   fileUploads   FileUpload[]
+  driveStudents DriveStudent[]
 
   @@index([companyId])
   @@index([status])
@@ -140,15 +142,34 @@ model DriveCollege {
 
 model Student {
   id           String        @id @default(uuid())
+  firstName    String
+  lastName     String
+  email        String
+  phone        String?
+  course       String?
+  cgpa         Float?
   collegeId    String
   college      College       @relation(fields: [collegeId], references: [id])
-  name         String
-  email        String
-  cgpa         Float
-  createdAt    DateTime      @default(now())
+  driveLinks   DriveStudent[]
   applications Application[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
+  @@unique([email, collegeId])
   @@index([collegeId])
+}
+
+model DriveStudent {
+  id         String   @id @default(uuid())
+  driveId    String
+  studentId  String
+  collegeId  String
+  drive      Drive    @relation(fields: [driveId], references: [id])
+  student    Student  @relation(fields: [studentId], references: [id])
+  college    College  @relation(fields: [collegeId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@unique([driveId, studentId])
 }
 
 model Application {
