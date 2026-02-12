@@ -1,238 +1,484 @@
 const prisma = require('../../../prisma/client')
 const AppError = require('../../utils/AppError')
 
-const STAGE_ORDER = ['APPLICATIONS', 'TEST', 'SHORTLIST', 'INTERVIEW', 'FINAL']
+const STATUS_TRANSITIONS = {
+  APPLIED: ['IN_TEST', 'REJECTED'],
+  IN_TEST: ['SHORTLISTED', 'REJECTED'],
+  SHORTLISTED: ['IN_INTERVIEW', 'REJECTED'],
+  IN_INTERVIEW: ['SELECTED', 'REJECTED'],
+  SELECTED: ['REJECTED'],
+  REJECTED: []
+}
+
+const STATUS_TO_STAGE = {
+  APPLIED: 'APPLICATIONS',
+  IN_TEST: 'TEST',
+  SHORTLISTED: 'SHORTLIST',
+  IN_INTERVIEW: 'INTERVIEW',
+  SELECTED: 'FINAL',
+  REJECTED: 'FINAL'
+}
 
 class ApplicationService {
-  async getDriveApplicationsForCompany(companyUserId, driveId) {
-    const company = await prisma.company.findUnique({ where: { userId: companyUserId } })
-    if (!company) throw new AppError('Company profile not found', 404)
-
-    const drive = await prisma.drive.findUnique({ where: { id: driveId } })
-    if (!drive) throw new AppError('Drive not found', 404)
-    if (drive.companyId !== company.id) throw new AppError('You do not have permission to view this drive', 403)
-
-    const [applications, activeStages] = await Promise.all([
-      prisma.application.findMany({
-        where: { driveId },
-        include: {
-          student: {
-            include: {
-              college: {
-                select: { id: true, name: true, city: true, state: true }
-              }
-            }
-          }
-        }
-      }),
-      prisma.driveStage.findMany({
-        where: { driveId, status: 'ACTIVE' },
-        select: { collegeId: true, stage: true }
-      })
-    ])
-
-    const activeStageMap = new Map(activeStages.map(s => [s.collegeId, s.stage]))
-    const grouped = {}
-    for (const app of applications) {
-      const college = app.student.college
-      if (!grouped[college.id]) {
-        grouped[college.id] = {
-          college: college,
-          currentStage: activeStageMap.get(college.id) || null,
-          applications: []
-        }
-      }
-      grouped[college.id].applications.push({
-        student: {
-          id: app.student.id,
-          name: app.student.name,
-          email: app.student.email,
-          cgpa: app.student.cgpa
-        },
-        status: app.status
-      })
-    }
-    return Object.values(grouped)
-  }
-
-  async moveStageForCollege(collegeUserId, driveId, stage) {
-    const college = await prisma.college.findUnique({ where: { userId: collegeUserId } })
-    if (!college) throw new AppError('College profile not found', 404)
-
-    const driveCollege = await prisma.driveCollege.findUnique({
-      where: { driveId_collegeId: { driveId, collegeId: college.id } }
-    })
-    if (!driveCollege) throw new AppError('Drive not found or not assigned to your college', 404)
-    if (driveCollege.invitationStatus !== 'ACCEPTED') throw new AppError('Drive invitation not accepted', 403)
-    if (driveCollege.managedBy !== 'COLLEGE') throw new AppError('Drive is not managed by college', 403)
-
-    const current = await prisma.driveStage.findUnique({
-      where: { driveId_collegeId_stage: { driveId, collegeId: college.id, stage } }
-    })
-    if (!current) throw new AppError('Stage record not found', 404)
-    if (current.status !== 'ACTIVE') throw new AppError('Current stage is not active', 400)
-
-    const idx = STAGE_ORDER.indexOf(stage)
-    if (idx === -1) throw new AppError('Invalid stage', 400)
-    if (idx === STAGE_ORDER.length - 1) throw new AppError('FINAL stage cannot move forward', 400)
-
-    const nextStage = STAGE_ORDER[idx + 1]
-
-    return await prisma.$transaction(async (tx) => {
-      await tx.driveStage.update({
-        where: { driveId_collegeId_stage: { driveId, collegeId: college.id, stage } },
-        data: { status: 'COMPLETED' }
-      })
-
-      await tx.driveStage.update({
-        where: { driveId_collegeId_stage: { driveId, collegeId: college.id, stage: nextStage } },
-        data: { status: 'ACTIVE' }
-      })
-
-      await tx.application.updateMany({
-        where: {
-          driveId,
-          student: { collegeId: college.id }
-        },
-        data: { status: nextStage }
-      })
-
-      return { movedTo: nextStage }
-    })
-  }
-
-  async moveStageForAdmin(driveId, collegeId, stage) {
+  async createApplications({ driveId, collegeId, studentIds, currentUser }) {
     const driveCollege = await prisma.driveCollege.findUnique({
       where: { driveId_collegeId: { driveId, collegeId } }
     })
-    if (!driveCollege) throw new AppError('Drive invitation not found', 404)
-    if (driveCollege.invitationStatus !== 'ACCEPTED') throw new AppError('Drive invitation not accepted', 403)
-    if (driveCollege.managedBy !== 'ADMIN') throw new AppError('Drive is not managed by admin', 403)
 
-    const current = await prisma.driveStage.findUnique({
-      where: { driveId_collegeId_stage: { driveId, collegeId, stage } }
+    if (!driveCollege) {
+      throw new AppError('Drive not found or not assigned to college', 404)
+    }
+
+    if (driveCollege.invitationStatus !== 'ACCEPTED') {
+      throw new AppError('Drive invitation not accepted', 403)
+    }
+
+    if (driveCollege.managedBy === 'ADMIN') {
+      if (currentUser.role !== 'ADMIN') {
+        throw new AppError('Only admin can create applications for admin-managed drive', 403)
+      }
+    } else if (driveCollege.managedBy === 'COLLEGE') {
+      if (currentUser.role !== 'COLLEGE') {
+        throw new AppError('Only college can create applications for college-managed drive', 403)
+      }
+
+      const college = await prisma.college.findUnique({ where: { id: collegeId } })
+      if (!college || college.userId !== currentUser.id) {
+        throw new AppError('Only owning college can create applications for this drive', 403)
+      }
+    } else {
+      throw new AppError('Drive management not set', 400)
+    }
+
+    const students = await prisma.student.findMany({
+      where: {
+        id: { in: studentIds },
+        collegeId
+      },
+      select: { id: true }
     })
-    if (!current) throw new AppError('Stage record not found', 404)
-    if (current.status !== 'ACTIVE') throw new AppError('Current stage is not active', 400)
 
-    const idx = STAGE_ORDER.indexOf(stage)
-    if (idx === -1) throw new AppError('Invalid stage', 400)
-    if (idx === STAGE_ORDER.length - 1) throw new AppError('FINAL stage cannot move forward', 400)
+    if (students.length !== studentIds.length) {
+      throw new AppError('Some students not found or do not belong to this college', 400)
+    }
 
-    const nextStage = STAGE_ORDER[idx + 1]
-
-    return await prisma.$transaction(async (tx) => {
-      await tx.driveStage.update({
-        where: { driveId_collegeId_stage: { driveId, collegeId, stage } },
-        data: { status: 'COMPLETED' }
-      })
-
-      await tx.driveStage.update({
-        where: { driveId_collegeId_stage: { driveId, collegeId, stage: nextStage } },
-        data: { status: 'ACTIVE' }
-      })
-
-      await tx.application.updateMany({
-        where: { driveId, student: { collegeId } },
-        data: { status: nextStage }
-      })
-
-      return { movedTo: nextStage }
-    })
-  }
-
-  async uploadShortlist(collegeUserId, driveId, studentIds) {
-    const college = await prisma.college.findUnique({ where: { userId: collegeUserId } })
-    if (!college) throw new AppError('College profile not found', 404)
-
-    const testStage = await prisma.driveStage.findUnique({
-      where: { driveId_collegeId_stage: { driveId, collegeId: college.id, stage: 'TEST' } }
-    })
-    if (!testStage || testStage.status !== 'ACTIVE') throw new AppError('TEST stage is not active', 400)
-
-    await prisma.application.updateMany({
+    const driveStudents = await prisma.driveStudent.findMany({
       where: {
         driveId,
         studentId: { in: studentIds },
-        student: { collegeId: college.id }
+        collegeId
       },
-      data: { status: 'SHORTLIST' }
+      select: { studentId: true }
     })
 
-    return { updated: studentIds.length }
-  }
+    if (driveStudents.length !== studentIds.length) {
+      throw new AppError('Some students are not linked to this drive', 400)
+    }
 
-  async uploadShortlistAdmin(driveId, collegeId, studentIds) {
-    const testStage = await prisma.driveStage.findUnique({
-      where: { driveId_collegeId_stage: { driveId, collegeId, stage: 'TEST' } }
-    })
-    if (!testStage || testStage.status !== 'ACTIVE') throw new AppError('TEST stage is not active', 400)
-
-    await prisma.application.updateMany({
-      where: { driveId, studentId: { in: studentIds }, student: { collegeId } },
-      data: { status: 'SHORTLIST' }
+    const existingApplications = await prisma.application.findMany({
+      where: {
+        driveId,
+        studentId: { in: studentIds }
+      },
+      select: { id: true }
     })
 
-    return { updated: studentIds.length }
-  }
+    if (existingApplications.length > 0) {
+      throw new AppError('Some students already have applications for this drive', 400)
+    }
 
-  async finalizeSelection(collegeUserId, driveId, selectedStudentIds) {
-    const college = await prisma.college.findUnique({ where: { userId: collegeUserId } })
-    if (!college) throw new AppError('College profile not found', 404)
-
-    const interviewStage = await prisma.driveStage.findUnique({
-      where: { driveId_collegeId_stage: { driveId, collegeId: college.id, stage: 'INTERVIEW' } }
-    })
-    if (!interviewStage || interviewStage.status !== 'ACTIVE') throw new AppError('INTERVIEW stage is not active', 400)
-
-    return await prisma.$transaction(async (tx) => {
-      await tx.application.updateMany({
-        where: {
+    const result = await prisma.$transaction(async (tx) => {
+      const created = await tx.application.createMany({
+        data: studentIds.map(studentId => ({
           driveId,
-          studentId: { in: selectedStudentIds },
-          student: { collegeId: college.id }
-        },
-        data: { status: 'FINAL' }
+          studentId,
+          collegeId,
+          status: 'APPLIED',
+          currentStage: 'APPLICATIONS',
+          stageHistory: [
+            {
+              fromStage: null,
+              toStage: 'APPLICATIONS',
+              status: 'APPLIED',
+              movedAt: new Date().toISOString()
+            }
+          ]
+        })),
+        skipDuplicates: true
       })
 
-      await tx.driveStage.update({
-        where: { driveId_collegeId_stage: { driveId, collegeId: college.id, stage: 'INTERVIEW' } },
-        data: { status: 'COMPLETED' }
+      const createdApplications = await tx.application.findMany({
+        where: { driveId, studentId: { in: studentIds } },
+        select: { id: true, studentId: true }
       })
 
-      await tx.driveStage.update({
-        where: { driveId_collegeId_stage: { driveId, collegeId: college.id, stage: 'FINAL' } },
-        data: { status: 'COMPLETED' }
-      })
+      await Promise.all(
+        createdApplications.map(app =>
+          tx.driveStudent.update({
+            where: {
+              driveId_studentId: {
+                driveId,
+                studentId: app.studentId
+              }
+            },
+            data: { applicationId: app.id }
+          })
+        )
+      )
 
-      return { finalized: selectedStudentIds.length }
+      return { created: created.count }
     })
+
+    return result
   }
 
-  async finalizeSelectionAdmin(driveId, collegeId, selectedStudentIds) {
-    const interviewStage = await prisma.driveStage.findUnique({
-      where: { driveId_collegeId_stage: { driveId, collegeId, stage: 'INTERVIEW' } }
+  async getApplicationsByDrive({ driveId, currentUser, filters = {}, pagination = {} }) {
+    const drive = await prisma.drive.findUnique({
+      where: { id: driveId },
+      select: { companyId: true }
     })
-    if (!interviewStage || interviewStage.status !== 'ACTIVE') throw new AppError('INTERVIEW stage is not active', 400)
 
-    return await prisma.$transaction(async (tx) => {
-      await tx.application.updateMany({
-        where: { driveId, studentId: { in: selectedStudentIds }, student: { collegeId } },
-        data: { status: 'FINAL' }
-      })
+    if (!drive) {
+      throw new AppError('Drive not found', 404)
+    }
 
-      await tx.driveStage.update({
-        where: { driveId_collegeId_stage: { driveId, collegeId, stage: 'INTERVIEW' } },
-        data: { status: 'COMPLETED' }
-      })
+    if (currentUser.role === 'COMPANY') {
+      const company = await prisma.company.findUnique({ where: { userId: currentUser.id } })
+      if (!company || company.id !== drive.companyId) {
+        throw new AppError('Access denied', 403)
+      }
+    }
 
-      await tx.driveStage.update({
-        where: { driveId_collegeId_stage: { driveId, collegeId, stage: 'FINAL' } },
-        data: { status: 'COMPLETED' }
-      })
+    const page = Math.max(parseInt(pagination.page, 10) || 1, 1)
+    const limit = Math.min(Math.max(parseInt(pagination.limit, 10) || 20, 1), 100)
+    const skip = (page - 1) * limit
 
-      return { finalized: selectedStudentIds.length }
+    const { collegeId, status, currentStage, search } = filters
+    const where = { driveId }
+
+    if (currentUser.role === 'COLLEGE') {
+      const college = await prisma.college.findUnique({ where: { userId: currentUser.id } })
+      if (!college) {
+        throw new AppError('College not found', 404)
+      }
+      where.collegeId = college.id
+    } else if (collegeId) {
+      where.collegeId = collegeId
+    }
+
+    if (status) where.status = status
+    if (currentStage) where.currentStage = currentStage
+    if (search) {
+      where.OR = [
+        {
+          student: {
+            OR: [
+              { firstName: { contains: search, mode: 'insensitive' } },
+              { lastName: { contains: search, mode: 'insensitive' } },
+              { email: { contains: search, mode: 'insensitive' } }
+            ]
+          }
+        }
+      ]
+    }
+
+    const [applications, total] = await Promise.all([
+      prisma.application.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          student: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              phone: true,
+              course: true,
+              cgpa: true
+            }
+          },
+          college: {
+            select: {
+              id: true,
+              name: true,
+              city: true,
+              state: true
+            }
+          }
+        },
+        orderBy: { appliedAt: 'desc' }
+      }),
+      prisma.application.count({ where })
+    ])
+
+    const stats = await this.getApplicationStats({ driveId, currentUser })
+
+    let groupedApplications = applications
+    if (currentUser.role === 'COMPANY') {
+      groupedApplications = applications.reduce((acc, app) => {
+        if (!acc[app.collegeId]) {
+          acc[app.collegeId] = {
+            college: app.college,
+            applications: []
+          }
+        }
+        acc[app.collegeId].applications.push(app)
+        return acc
+      }, {})
+    }
+
+    return {
+      applications: groupedApplications,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      },
+      stats
+    }
+  }
+
+  async getApplicationsByCollege({ driveId, collegeId, currentUser, filters = {}, pagination = {} }) {
+    const drive = await prisma.drive.findUnique({
+      where: { id: driveId },
+      select: {
+        companyId: true,
+        driveColleges: {
+          where: { collegeId },
+          select: { managedBy: true, invitationStatus: true }
+        }
+      }
     })
+
+    if (!drive) {
+      throw new AppError('Drive not found', 404)
+    }
+
+    const driveCollege = drive.driveColleges[0]
+    if (!driveCollege) {
+      throw new AppError('College not assigned to this drive', 404)
+    }
+
+    if (driveCollege.invitationStatus !== 'ACCEPTED') {
+      throw new AppError('Drive invitation not accepted for this college', 403)
+    }
+
+    if (currentUser.role === 'COLLEGE') {
+      const college = await prisma.college.findUnique({ where: { userId: currentUser.id } })
+      if (!college || college.id !== collegeId) {
+        throw new AppError('Access denied', 403)
+      }
+      if (driveCollege.managedBy === 'ADMIN') {
+        throw new AppError('College cannot access admin-managed applications for this drive', 403)
+      }
+    }
+
+    if (currentUser.role === 'COMPANY') {
+      const company = await prisma.company.findUnique({
+        where: { userId: currentUser.id },
+        select: { id: true }
+      })
+      if (!company || company.id !== drive.companyId) {
+        throw new AppError('Access denied', 403)
+      }
+    }
+
+    const page = Math.max(parseInt(pagination.page, 10) || 1, 1)
+    const limit = Math.min(Math.max(parseInt(pagination.limit, 10) || 20, 1), 100)
+    const skip = (page - 1) * limit
+
+    const { status, currentStage, search } = filters
+    const where = { driveId, collegeId }
+    if (status) where.status = status
+    if (currentStage) where.currentStage = currentStage
+    if (search) {
+      where.OR = [
+        {
+          student: {
+            OR: [
+              { firstName: { contains: search, mode: 'insensitive' } },
+              { lastName: { contains: search, mode: 'insensitive' } },
+              { email: { contains: search, mode: 'insensitive' } }
+            ]
+          }
+        }
+      ]
+    }
+
+    const [applications, total] = await Promise.all([
+      prisma.application.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          student: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              phone: true,
+              course: true,
+              cgpa: true
+            }
+          }
+        },
+        orderBy: { appliedAt: 'desc' }
+      }),
+      prisma.application.count({ where })
+    ])
+
+    return {
+      applications,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      }
+    }
+  }
+
+  async getApplicationStats({ driveId, currentUser }) {
+    const drive = await prisma.drive.findUnique({
+      where: { id: driveId },
+      select: { companyId: true }
+    })
+
+    if (!drive) {
+      throw new AppError('Drive not found', 404)
+    }
+
+    if (currentUser.role === 'COMPANY') {
+      const company = await prisma.company.findUnique({ where: { userId: currentUser.id } })
+      if (!company || company.id !== drive.companyId) {
+        throw new AppError('Access denied', 403)
+      }
+    }
+
+    const where = { driveId }
+    if (currentUser.role === 'COLLEGE') {
+      const college = await prisma.college.findUnique({ where: { userId: currentUser.id } })
+      if (!college) {
+        throw new AppError('College not found', 404)
+      }
+      where.collegeId = college.id
+    }
+
+    const isCollegeRole = currentUser.role === 'COLLEGE'
+    const [total, statusStats, stageStats, collegeStats] = await Promise.all([
+      prisma.application.count({ where }),
+      prisma.application.groupBy({
+        by: ['status'],
+        where,
+        _count: { _all: true }
+      }),
+      prisma.application.groupBy({
+        by: ['currentStage'],
+        where,
+        _count: { _all: true }
+      }),
+      isCollegeRole
+        ? Promise.resolve(null)
+        : prisma.application.groupBy({
+            by: ['collegeId'],
+            where,
+            _count: { _all: true }
+          })
+    ])
+
+    return {
+      total,
+      byStatus: statusStats.reduce((acc, stat) => {
+        acc[stat.status] = stat._count._all
+        return acc
+      }, {}),
+      byStage: stageStats.reduce((acc, stat) => {
+        acc[stat.currentStage] = stat._count._all
+        return acc
+      }, {}),
+      byCollege: collegeStats
+        ? collegeStats.reduce((acc, stat) => {
+            acc[stat.collegeId] = stat._count._all
+            return acc
+          }, {})
+        : null
+    }
+  }
+
+  async updateApplicationStatus({ applicationId, status, currentUser }) {
+    const application = await prisma.application.findUnique({
+      where: { id: applicationId },
+      include: {
+        drive: { select: { companyId: true } }
+      }
+    })
+
+    if (!application) {
+      throw new AppError('Application not found', 404)
+    }
+
+    if (currentUser.role === 'COMPANY') {
+      const company = await prisma.company.findUnique({ where: { userId: currentUser.id } })
+      if (!company || company.id !== application.drive.companyId) {
+        throw new AppError('Access denied', 403)
+      }
+    } else if (currentUser.role === 'COLLEGE') {
+      throw new AppError('Colleges cannot update application status', 403)
+    }
+
+    if (!STATUS_TRANSITIONS[application.status]) {
+      throw new AppError(`Unknown current status: ${application.status}`, 400)
+    }
+
+    if (!STATUS_TRANSITIONS[application.status].includes(status)) {
+      throw new AppError(`Invalid status transition from ${application.status} to ${status}`, 400)
+    }
+
+    const nextStage = STATUS_TO_STAGE[status] || application.currentStage
+    const existingHistory = Array.isArray(application.stageHistory) ? application.stageHistory : []
+    const stageHistory = [
+      ...existingHistory,
+      {
+        fromStatus: application.status,
+        toStatus: status,
+        fromStage: application.currentStage,
+        toStage: nextStage,
+        movedAt: new Date().toISOString()
+      }
+    ]
+
+    const updatedApplication = await prisma.application.update({
+      where: { id: applicationId },
+      data: {
+        status,
+        currentStage: nextStage,
+        selectedAt: status === 'SELECTED' ? new Date() : application.selectedAt,
+        rejectedAt: status === 'REJECTED' ? new Date() : application.rejectedAt,
+        stageHistory
+      },
+      include: {
+        student: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        },
+        college: {
+          select: {
+            id: true,
+            name: true
+          }
+        }
+      }
+    })
+
+    return updatedApplication
   }
 }
 

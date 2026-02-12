@@ -2,8 +2,10 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 async function main() {
-  const admin = await prisma.user.create({
-    data: {
+  const admin = await prisma.user.upsert({
+    where: { email: 'admin@freshbit.test' },
+    update: {},
+    create: {
       email: 'admin@freshbit.test',
       password: 'hashed-admin-password',
       role: 'ADMIN',
@@ -12,8 +14,10 @@ async function main() {
     }
   })
 
-  const companyUser = await prisma.user.create({
-    data: {
+  const companyUser = await prisma.user.upsert({
+    where: { email: 'company@freshbit.test' },
+    update: {},
+    create: {
       email: 'company@freshbit.test',
       password: 'hashed-company-password',
       role: 'COMPANY',
@@ -22,8 +26,10 @@ async function main() {
     }
   })
 
-  const company = await prisma.company.create({
-    data: {
+  const company = await prisma.company.upsert({
+    where: { userId: companyUser.id },
+    update: {},
+    create: {
       name: 'FreshBit Co',
       domain: 'freshbit.example',
       approved: true,
@@ -31,8 +37,10 @@ async function main() {
     }
   })
 
-  const collegeUser1 = await prisma.user.create({
-    data: {
+  const collegeUser1 = await prisma.user.upsert({
+    where: { email: 'college1@freshbit.test' },
+    update: {},
+    create: {
       email: 'college1@freshbit.test',
       password: 'hashed-college1-password',
       role: 'COLLEGE',
@@ -41,8 +49,10 @@ async function main() {
     }
   })
 
-  const collegeUser2 = await prisma.user.create({
-    data: {
+  const collegeUser2 = await prisma.user.upsert({
+    where: { email: 'college2@freshbit.test' },
+    update: {},
+    create: {
       email: 'college2@freshbit.test',
       password: 'hashed-college2-password',
       role: 'COLLEGE',
@@ -51,8 +61,10 @@ async function main() {
     }
   })
 
-  const college1 = await prisma.college.create({
-    data: {
+  const college1 = await prisma.college.upsert({
+    where: { userId: collegeUser1.id },
+    update: {},
+    create: {
       name: 'Alpha College',
       city: 'City A',
       state: 'State A',
@@ -62,8 +74,10 @@ async function main() {
     }
   })
 
-  const college2 = await prisma.college.create({
-    data: {
+  const college2 = await prisma.college.upsert({
+    where: { userId: collegeUser2.id },
+    update: {},
+    create: {
       name: 'Beta College',
       city: 'City B',
       state: 'State B',
@@ -73,8 +87,11 @@ async function main() {
     }
   })
 
-  const drive = await prisma.drive.create({
-    data: {
+  const drive = await prisma.drive.upsert({
+    where: { id: 'test-drive-1' },
+    update: {},
+    create: {
+      id: 'test-drive-1',
       companyId: company.id,
       roleTitle: 'Software Engineer',
       salary: 1200000,

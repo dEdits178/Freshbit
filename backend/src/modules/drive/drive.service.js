@@ -1,6 +1,8 @@
 const prisma = require('../../../prisma/client')
 const AppError = require('../../utils/AppError')
 
+const STAGE_FLOW = ['APPLICATIONS', 'TEST', 'SHORTLIST', 'INTERVIEW', 'FINAL']
+
 class DriveService {
   async createDrive(companyUserId, { roleTitle, salary, description, collegeIds }) {
     // Verify company exists
@@ -32,7 +34,8 @@ class DriveService {
           roleTitle,
           salary: parseInt(salary),
           description,
-          status: 'DRAFT'
+          status: 'DRAFT',
+          currentStage: 'APPLICATIONS'
         }
       })
 
@@ -47,23 +50,15 @@ class DriveService {
         }))
       })
 
-      // 3. Initialize DriveStages for each college
-      const stages = ['APPLICATIONS', 'TEST', 'SHORTLIST', 'INTERVIEW', 'FINAL']
-      const stageRecords = []
-
-      for (const collegeId of collegeIds) {
-        for (const stage of stages) {
-          stageRecords.push({
-            driveId: newDrive.id,
-            collegeId,
-            stage,
-            status: 'NOT_STARTED'
-          })
-        }
-      }
-
-      await tx.driveStage.createMany({
-        data: stageRecords
+      // 3. Initialize Drive stages (single timeline per drive)
+      await tx.stage.createMany({
+        data: STAGE_FLOW.map((name, index) => ({
+          driveId: newDrive.id,
+          name,
+          order: index + 1,
+          status: name === 'APPLICATIONS' ? 'ACTIVE' : 'PENDING',
+          startedAt: name === 'APPLICATIONS' ? new Date() : null
+        }))
       })
 
       // 4. Fetch complete drive with relations
@@ -92,10 +87,13 @@ class DriveService {
           stages: {
             select: {
               id: true,
-              stage: true,
+              name: true,
+              order: true,
               status: true,
-              collegeId: true
-            }
+              startedAt: true,
+              completedAt: true
+            },
+            orderBy: { order: 'asc' }
           }
         }
       })
@@ -152,10 +150,13 @@ class DriveService {
         stages: {
           select: {
             id: true,
-            stage: true,
+            name: true,
+            order: true,
             status: true,
-            collegeId: true
-          }
+            startedAt: true,
+            completedAt: true
+          },
+          orderBy: { order: 'asc' }
         }
       }
     })
@@ -189,10 +190,13 @@ class DriveService {
         },
         stages: {
           select: {
-            stage: true,
+            name: true,
+            order: true,
             status: true,
-            collegeId: true
-          }
+            startedAt: true,
+            completedAt: true
+          },
+          orderBy: { order: 'asc' }
         }
       },
       orderBy: {
@@ -237,10 +241,13 @@ class DriveService {
         stages: {
           select: {
             id: true,
-            stage: true,
+            name: true,
+            order: true,
             status: true,
-            collegeId: true
-          }
+            startedAt: true,
+            completedAt: true
+          },
+          orderBy: { order: 'asc' }
         }
       }
     })
@@ -317,19 +324,6 @@ class DriveService {
           }
         })
 
-        // Activate APPLICATIONS stage
-        await tx.driveStage.update({
-          where: {
-            driveId_collegeId_stage: {
-              driveId,
-              collegeId: college.id,
-              stage: 'APPLICATIONS'
-            }
-          },
-          data: {
-            status: 'ACTIVE'
-          }
-        })
       } else if (action === 'REJECT') {
         // Reject the drive
         updatedDriveCollege = await tx.driveCollege.update({
@@ -412,19 +406,6 @@ class DriveService {
           }
         })
 
-        // Activate APPLICATIONS stage
-        await tx.driveStage.update({
-          where: {
-            driveId_collegeId_stage: {
-              driveId,
-              collegeId,
-              stage: 'APPLICATIONS'
-            }
-          },
-          data: {
-            status: 'ACTIVE'
-          }
-        })
       } else if (action === 'REJECT') {
         // Reject the drive
         updatedDriveCollege = await tx.driveCollege.update({

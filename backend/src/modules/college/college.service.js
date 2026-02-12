@@ -84,14 +84,16 @@ class CollegeService {
               }
             },
             stages: {
-              where: { collegeId: college.id },
               select: {
                 id: true,
-                stage: true,
-                status: true
+                name: true,
+                status: true,
+                order: true,
+                startedAt: true,
+                completedAt: true
               },
               orderBy: {
-                stage: 'asc'
+                order: 'asc'
               }
             }
           }
@@ -116,7 +118,7 @@ class CollegeService {
         description: drive.description,
         status: drive.status,
         company: drive.company,
-        currentStage: activeStage ? activeStage.stage : null,
+        currentStage: activeStage ? activeStage.name : drive.currentStage,
         stages: drive.stages,
         invitationStatus: dc.invitationStatus,
         managedBy: dc.managedBy,
@@ -156,15 +158,17 @@ class CollegeService {
               }
             },
             stages: {
-              where: { collegeId: college.id },
               select: {
                 id: true,
-                stage: true,
+                name: true,
+                order: true,
                 status: true,
+                startedAt: true,
+                completedAt: true,
                 updatedAt: true
               },
               orderBy: {
-                stage: 'asc'
+                order: 'asc'
               }
             }
           }
@@ -187,7 +191,7 @@ class CollegeService {
       status: drive.status,
       jdFileUrl: drive.jdFileUrl,
       company: drive.company,
-      currentStage: activeStage ? activeStage.stage : null,
+      currentStage: activeStage ? activeStage.name : drive.currentStage,
       stages: drive.stages,
       invitationStatus: driveCollege.invitationStatus,
       managedBy: driveCollege.managedBy,

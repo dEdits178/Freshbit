@@ -26,7 +26,7 @@ enum DriveStatus {
   CLOSED
 }
 
-enum StageType {
+enum StageName {
   APPLICATIONS
   TEST
   SHORTLIST
@@ -35,7 +35,7 @@ enum StageType {
 }
 
 enum StageStatus {
-  PENDING
+  NOT_STARTED
   ACTIVE
   COMPLETED
 }
@@ -47,17 +47,6 @@ enum FileType {
   FINAL_LIST
 }
 
-enum InvitationStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
-}
-
-enum ManagedBy {
-  COLLEGE
-  ADMIN
-}
-
 enum ApplicationStatus {
   APPLIED
   IN_TEST
@@ -65,6 +54,19 @@ enum ApplicationStatus {
   IN_INTERVIEW
   SELECTED
   REJECTED
+}
+}
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+  ACCEPTED
+  REJECTED
+}
+
+enum ManagedBy {
+  COLLEGE
+  ADMIN
 }
 
 model User {
@@ -105,9 +107,9 @@ model College {
   user          User           @relation("UserCollege", fields: [userId], references: [id])
   driveColleges DriveCollege[]
   students      Student[]
+  stages        DriveStage[]
   fileUploads   FileUpload[]
   driveStudents DriveStudent[]
-  applications Application[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }
@@ -121,17 +123,14 @@ model Drive {
   description   String
   status        DriveStatus
   jdFileUrl     String?
-  currentStage  StageType       @default(APPLICATIONS)
-  isLocked      Boolean         @default(false)
-  lockedAt      DateTime?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   driveColleges DriveCollege[]
   applications  Application[]
-  stages        Stage[]
+  stages        DriveStage[]
   fileUploads   FileUpload[]
   driveStudents DriveStudent[]
-  
+
   @@index([companyId])
   @@index([status])
 }
@@ -146,7 +145,7 @@ model DriveCollege {
   drive            Drive            @relation(fields: [driveId], references: [id])
   college          College          @relation(fields: [collegeId], references: [id])
   createdAt        DateTime         @default(now())
-  
+
   @@unique([driveId, collegeId])
   @@index([driveId])
   @@index([collegeId])
@@ -166,7 +165,7 @@ model Student {
   applications Application[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  
+
   @@unique([email, collegeId])
   @@index([collegeId])
 }
@@ -182,7 +181,7 @@ model DriveStudent {
   student          Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   college          College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
   createdAt        DateTime @default(now())
-  
+
   @@unique([driveId, studentId])
   @@index([driveId])
   @@index([collegeId])
@@ -198,10 +197,7 @@ model Application {
   status        ApplicationStatus @default(APPLIED)
   
   // Stage tracking
-  currentStage  StageType @default(APPLICATIONS)
-  stageHistory  Json?
-  rejectedAt    DateTime?
-  selectedAt    DateTime?
+  currentStage  String   @default("APPLICATIONS")
   
   // Metadata
   appliedAt     DateTime @default(now())
@@ -211,32 +207,26 @@ model Application {
   drive         Drive    @relation(fields: [driveId], references: [id], onDelete: Cascade)
   student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   college       College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
-  driveStudents DriveStudent[]
   
   @@unique([driveId, studentId])
+
+  @@unique([studentId, driveId])
   @@index([driveId])
   @@index([studentId])
-  @@index([collegeId])
-  @@index([status])
-  @@index([currentStage])
 }
 
-model Stage {
-  id          String      @id @default(uuid())
-  driveId     String
-  name        StageType
-  status      StageStatus @default(PENDING)
-  order       Int
-  startedAt   DateTime?
-  completedAt DateTime?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+model DriveStage {
+  id        String      @id @default(uuid())
+  driveId   String
+  collegeId String
+  drive     Drive       @relation(fields: [driveId], references: [id])
+  college   College     @relation(fields: [collegeId], references: [id])
+  stage     StageName
+  status    StageStatus
+  updatedAt DateTime    @updatedAt
 
-  drive       Drive       @relation(fields: [driveId], references: [id], onDelete: Cascade)
-
-  @@unique([driveId, name])
-  @@index([driveId])
-  @@index([status])
+  @@unique([driveId, collegeId, stage])
+  @@index([driveId, collegeId])
 }
 
 model FileUpload {
@@ -254,7 +244,7 @@ model FileUpload {
   uploadedByUserId String
   uploadedBy   User     @relation(fields: [uploadedByUserId], references: [id])
   createdAt    DateTime @default(now())
-  
+
   @@index([driveId])
   @@index([collegeId])
   @@index([uploadedByUserId])
@@ -268,6 +258,6 @@ model AuditLog {
   entity    String
   entityId  String
   createdAt DateTime @default(now())
-  
+
   @@index([actorId])
 }

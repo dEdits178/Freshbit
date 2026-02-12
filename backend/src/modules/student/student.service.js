@@ -118,16 +118,11 @@ class StudentService {
       throw new AppError('Drive is not managed by college', 403)
     }
 
-    const appStage = await prisma.driveStage.findUnique({
-      where: {
-        driveId_collegeId_stage: {
-          driveId,
-          collegeId: college.id,
-          stage: 'APPLICATIONS'
-        }
-      }
+    const drive = await prisma.drive.findUnique({
+      where: { id: driveId },
+      select: { currentStage: true, isLocked: true }
     })
-    if (!appStage || appStage.status !== 'ACTIVE') {
+    if (!drive || drive.isLocked || drive.currentStage !== 'APPLICATIONS') {
       throw new AppError('APPLICATIONS stage is not active', 400)
     }
 
@@ -155,7 +150,8 @@ class StudentService {
 
     const toCreate = students.filter(s => !existingEmailSet.has(s.email)).map(s => ({
       collegeId: college.id,
-      name: s.name,
+      firstName: s.firstName || String(s.name || '').trim().split(' ')[0] || 'Student',
+      lastName: s.lastName || String(s.name || '').trim().split(' ').slice(1).join(' ') || 'NA',
       email: s.email,
       cgpa: s.cgpa
     }))
@@ -178,7 +174,17 @@ class StudentService {
           data: createdStudents.map(st => ({
             studentId: st.id,
             driveId,
-            status: 'APPLICATIONS'
+            collegeId: college.id,
+            status: 'APPLIED',
+            currentStage: 'APPLICATIONS',
+            stageHistory: [
+              {
+                fromStage: null,
+                toStage: 'APPLICATIONS',
+                status: 'APPLIED',
+                movedAt: new Date().toISOString()
+              }
+            ]
           }))
         })
       }
@@ -203,10 +209,11 @@ class StudentService {
       throw new AppError('Drive is not managed by admin', 403)
     }
 
-    const appStage = await prisma.driveStage.findUnique({
-      where: { driveId_collegeId_stage: { driveId, collegeId, stage: 'APPLICATIONS' } }
+    const drive = await prisma.drive.findUnique({
+      where: { id: driveId },
+      select: { currentStage: true, isLocked: true }
     })
-    if (!appStage || appStage.status !== 'ACTIVE') {
+    if (!drive || drive.isLocked || drive.currentStage !== 'APPLICATIONS') {
       throw new AppError('APPLICATIONS stage is not active', 400)
     }
 
@@ -226,7 +233,8 @@ class StudentService {
 
     const toCreate = students.filter(s => !existingEmailSet.has(s.email)).map(s => ({
       collegeId,
-      name: s.name,
+      firstName: s.firstName || String(s.name || '').trim().split(' ')[0] || 'Student',
+      lastName: s.lastName || String(s.name || '').trim().split(' ').slice(1).join(' ') || 'NA',
       email: s.email,
       cgpa: s.cgpa
     }))
@@ -244,7 +252,17 @@ class StudentService {
           data: createdStudents.map(st => ({
             studentId: st.id,
             driveId,
-            status: 'APPLICATIONS'
+            collegeId,
+            status: 'APPLIED',
+            currentStage: 'APPLICATIONS',
+            stageHistory: [
+              {
+                fromStage: null,
+                toStage: 'APPLICATIONS',
+                status: 'APPLIED',
+                movedAt: new Date().toISOString()
+              }
+            ]
           }))
         })
       }
