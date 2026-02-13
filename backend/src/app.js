@@ -7,6 +7,7 @@ const fileRoutes = require('./modules/file/file.routes')
 const studentRoutes = require('./modules/student/student.routes')
 const applicationRoutes = require('./modules/application/application.routes')
 const stageRoutes = require('./modules/stage/stage.routes')
+const selectionRoutes = require('./modules/selection/selection.routes')
 const errorHandler = require('./middleware/error.middleware')
 
 const app = express()
@@ -20,7 +21,7 @@ app.get('/', (req, res) => {
     success: true,
     message: 'FreshBit API Running',
     version: '1.0.0',
-    stage: 'Stage 8 - Stage Progression Engine'
+    stage: 'Stage 9 - Shortlist & Final Selection Engine'
   })
 })
 
@@ -32,6 +33,7 @@ app.use('/api', fileRoutes)
 app.use('/api/students', studentRoutes)
 app.use('/api/applications', applicationRoutes)
 app.use('/api/stages', stageRoutes)
+app.use('/api/selection', selectionRoutes)
 
 // Error handling middleware (must be last)
 app.use(errorHandler)

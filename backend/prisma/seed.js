@@ -1,25 +1,38 @@
 const { PrismaClient } = require('@prisma/client')
+const bcrypt = require('bcryptjs')
 const prisma = new PrismaClient()
 
 async function main() {
+  const adminPassword = await bcrypt.hash('Admin@123', 10)
   const admin = await prisma.user.upsert({
     where: { email: 'admin@freshbit.test' },
-    update: {},
+    update: {
+      password: adminPassword,
+      role: 'ADMIN',
+      status: 'APPROVED',
+      verified: true
+    },
     create: {
       email: 'admin@freshbit.test',
-      password: 'hashed-admin-password',
+      password: adminPassword,
       role: 'ADMIN',
       status: 'APPROVED',
       verified: true
     }
   })
 
+  const companyPassword = await bcrypt.hash('Company@123', 10)
   const companyUser = await prisma.user.upsert({
     where: { email: 'company@freshbit.test' },
-    update: {},
+    update: {
+      password: companyPassword,
+      role: 'COMPANY',
+      status: 'APPROVED',
+      verified: true
+    },
     create: {
       email: 'company@freshbit.test',
-      password: 'hashed-company-password',
+      password: companyPassword,
       role: 'COMPANY',
       status: 'APPROVED',
       verified: true
@@ -37,24 +50,36 @@ async function main() {
     }
   })
 
+  const college1Password = await bcrypt.hash('College1@123', 10)
   const collegeUser1 = await prisma.user.upsert({
     where: { email: 'college1@freshbit.test' },
-    update: {},
+    update: {
+      password: college1Password,
+      role: 'COLLEGE',
+      status: 'APPROVED',
+      verified: true
+    },
     create: {
       email: 'college1@freshbit.test',
-      password: 'hashed-college1-password',
+      password: college1Password,
       role: 'COLLEGE',
       status: 'APPROVED',
       verified: true
     }
   })
 
+  const college2Password = await bcrypt.hash('College2@123', 10)
   const collegeUser2 = await prisma.user.upsert({
     where: { email: 'college2@freshbit.test' },
-    update: {},
+    update: {
+      password: college2Password,
+      role: 'COLLEGE',
+      status: 'APPROVED',
+      verified: true
+    },
     create: {
       email: 'college2@freshbit.test',
-      password: 'hashed-college2-password',
+      password: college2Password,
       role: 'COLLEGE',
       status: 'APPROVED',
       verified: true
