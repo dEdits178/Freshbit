@@ -31,6 +31,30 @@ class StudentController {
     })
     successResponse(res, 200, 'Students confirmed', data)
   })
+
+  getStudents = asyncHandler(async (req, res) => {
+    const { driveId } = req.params
+    const { page, limit, search } = req.query
+    const college = await prisma.college.findUnique({ where: { userId: req.user.id } })
+    const data = await studentService.getStudentsByDrive({
+      driveId,
+      collegeId: college.id,
+      page: parseInt(page) || 1,
+      limit: parseInt(limit) || 20,
+      search: search || ''
+    })
+    successResponse(res, 200, 'Students fetched successfully', data)
+  })
+
+  checkUploadStatus = asyncHandler(async (req, res) => {
+    const { driveId } = req.params
+    const college = await prisma.college.findUnique({ where: { userId: req.user.id } })
+    const data = await studentService.checkStudentsUploaded({
+      driveId,
+      collegeId: college.id
+    })
+    successResponse(res, 200, 'Upload status checked', data)
+  })
 }
 
 module.exports = new StudentController()

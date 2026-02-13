@@ -83,6 +83,11 @@ class StudentService {
         skipDuplicates: true
       })
 
+      await tx.driveCollege.update({
+        where: { driveId_collegeId: { driveId, collegeId } },
+        data: { studentsUploaded: true, studentCount: inserted > 0 ? inserted : allStudents.length }
+      })
+
       return {
         inserted,
         linked: linkRes.count
@@ -271,6 +276,56 @@ class StudentService {
 
     return { added: createdCount }
   }
+  async getStudentsByDrive({ driveId, collegeId, page = 1, limit = 20, search = '' }) {
+    const skip = (page - 1) * limit
+    const where = {
+      collegeId,
+      driveLinks: { some: { driveId } }
+    }
+    if (search) {
+      where.OR = [
+        { firstName: { contains: search, mode: 'insensitive' } },
+        { lastName: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } }
+      ]
+    }
+    const [students, total] = await Promise.all([
+      prisma.student.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { firstName: 'asc' },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+          phone: true,
+          course: true,
+          cgpa: true,
+          createdAt: true
+        }
+      }),
+      prisma.student.count({ where })
+    ])
+    return {
+      students,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      }
+    }
+  }
+
+  async checkStudentsUploaded({ driveId, collegeId }) {
+    const count = await prisma.driveStudent.count({
+      where: { driveId, collegeId }
+    })
+    return { uploaded: count > 0, count }
+  }
+
 }
 
 module.exports = new StudentService()

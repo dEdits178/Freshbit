@@ -45,4 +45,14 @@ router.post('/:driveId/confirm',
   studentController.confirm
 )
 
+router.get('/check/:driveId',
+  requireRole('COLLEGE', 'ADMIN'),
+  studentController.checkUploadStatus
+)
+
+router.get('/drive/:driveId',
+  requireRole('COLLEGE', 'ADMIN'),
+  studentController.getStudents
+)
+
 module.exports = router

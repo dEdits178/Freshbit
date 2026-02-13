@@ -143,6 +143,18 @@ model DriveCollege {
   invitationStatus InvitationStatus @default(PENDING)
   managedBy        ManagedBy?
   startedAt        DateTime?
+  studentsUploaded Boolean          @default(false)
+  studentCount     Int              @default(0)
+  shortlistSubmitted       Boolean  @default(false)
+  shortlistSubmittedAt     DateTime?
+  interviewListSubmitted   Boolean  @default(false)
+  interviewListSubmittedAt DateTime?
+  finalized                Boolean  @default(false)
+  finalizedAt              DateTime?
+  finalizedBy              String?
+  shortlistedCount         Int      @default(0)
+  interviewedCount         Int      @default(0)
+  selectedCount            Int      @default(0)
   drive            Drive            @relation(fields: [driveId], references: [id])
   college          College          @relation(fields: [collegeId], references: [id])
   createdAt        DateTime         @default(now())
@@ -200,7 +212,13 @@ model Application {
   // Stage tracking
   currentStage  StageType @default(APPLICATIONS)
   stageHistory  Json?
+  shortlistedAt DateTime?
+  shortlistedBy String?
+  interviewedAt DateTime?
+  interviewedBy String?
+  selectedBy    String?
   rejectedAt    DateTime?
+  rejectedBy    String?
   selectedAt    DateTime?
   
   // Metadata
