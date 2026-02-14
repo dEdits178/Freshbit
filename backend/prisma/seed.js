@@ -1,148 +1,59 @@
 const { PrismaClient } = require('@prisma/client')
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcrypt')
+
 const prisma = new PrismaClient()
 
+async function upsertUser({ email, rawPassword, role }) {
+  const password = await bcrypt.hash(rawPassword, 10)
+
+  return prisma.user.upsert({
+    where: { email },
+    update: {
+      password,
+      role,
+      status: 'APPROVED',
+      verified: true,
+      // audit flags not present in current schema
+    },
+    create: {
+      email,
+      password,
+      role,
+      status: 'APPROVED',
+      verified: true,
+      // audit flags not present in current schema
+    }
+  })
+}
+
 async function main() {
-  const adminPassword = await bcrypt.hash('Admin@123', 10)
-  const admin = await prisma.user.upsert({
-    where: { email: 'admin@freshbit.test' },
-    update: {
-      password: adminPassword,
-      role: 'ADMIN',
-      status: 'APPROVED',
-      verified: true
-    },
-    create: {
-      email: 'admin@freshbit.test',
-      password: adminPassword,
-      role: 'ADMIN',
-      status: 'APPROVED',
-      verified: true
-    }
-  })
+  const admin = await upsertUser({ email: 'admin@freshbit.com', rawPassword: 'Admin@123', role: 'ADMIN' })
 
-  const companyPassword = await bcrypt.hash('Company@123', 10)
-  const companyUser = await prisma.user.upsert({
-    where: { email: 'company@freshbit.test' },
-    update: {
-      password: companyPassword,
-      role: 'COMPANY',
-      status: 'APPROVED',
-      verified: true
-    },
-    create: {
-      email: 'company@freshbit.test',
-      password: companyPassword,
-      role: 'COMPANY',
-      status: 'APPROVED',
-      verified: true
-    }
-  })
+  const companyUser = await upsertUser({ email: 'company@freshbit.com', rawPassword: 'Company@123', role: 'COMPANY' })
 
-  const company = await prisma.company.upsert({
+  const collegeUser = await upsertUser({ email: 'college@freshbit.com', rawPassword: 'College@123', role: 'COLLEGE' })
+
+  await prisma.company.upsert({
     where: { userId: companyUser.id },
-    update: {},
-    create: {
-      name: 'FreshBit Co',
-      domain: 'freshbit.example',
-      approved: true,
-      userId: companyUser.id
-    }
+    update: { name: 'FreshBit Co', domain: 'freshbit.example', approved: true },
+    create: { userId: companyUser.id, name: 'FreshBit Co', domain: 'freshbit.example', approved: true }
   })
 
-  const college1Password = await bcrypt.hash('College1@123', 10)
-  const collegeUser1 = await prisma.user.upsert({
-    where: { email: 'college1@freshbit.test' },
-    update: {
-      password: college1Password,
-      role: 'COLLEGE',
-      status: 'APPROVED',
-      verified: true
-    },
-    create: {
-      email: 'college1@freshbit.test',
-      password: college1Password,
-      role: 'COLLEGE',
-      status: 'APPROVED',
-      verified: true
-    }
+  await prisma.college.upsert({
+    where: { userId: collegeUser.id },
+    update: { name: 'Alpha College', city: 'City A', state: 'State A', tier: 'A', approved: true },
+    create: { userId: collegeUser.id, name: 'Alpha College', city: 'City A', state: 'State A', tier: 'A', approved: true }
   })
 
-  const college2Password = await bcrypt.hash('College2@123', 10)
-  const collegeUser2 = await prisma.user.upsert({
-    where: { email: 'college2@freshbit.test' },
-    update: {
-      password: college2Password,
-      role: 'COLLEGE',
-      status: 'APPROVED',
-      verified: true
-    },
-    create: {
-      email: 'college2@freshbit.test',
-      password: college2Password,
-      role: 'COLLEGE',
-      status: 'APPROVED',
-      verified: true
-    }
-  })
-
-  const college1 = await prisma.college.upsert({
-    where: { userId: collegeUser1.id },
-    update: {},
-    create: {
-      name: 'Alpha College',
-      city: 'City A',
-      state: 'State A',
-      tier: 'Tier 2',
-      approved: true,
-      userId: collegeUser1.id
-    }
-  })
-
-  const college2 = await prisma.college.upsert({
-    where: { userId: collegeUser2.id },
-    update: {},
-    create: {
-      name: 'Beta College',
-      city: 'City B',
-      state: 'State B',
-      tier: 'Tier 1',
-      approved: true,
-      userId: collegeUser2.id
-    }
-  })
-
-  const drive = await prisma.drive.upsert({
-    where: { id: 'test-drive-1' },
-    update: {},
-    create: {
-      id: 'test-drive-1',
-      companyId: company.id,
-      roleTitle: 'Software Engineer',
-      salary: 1200000,
-      description: 'Hiring for FreshBit campus drive',
-      status: 'PUBLISHED',
-      jdFileUrl: null
-    }
-  })
-
-  await prisma.driveCollege.createMany({
-    data: [
-      { driveId: drive.id, collegeId: college1.id },
-      { driveId: drive.id, collegeId: college2.id }
-    ],
-    skipDuplicates: true
-  })
-
-  return { admin, company, college1, college2, drive }
+  console.log('✅ Seeded users:')
+  console.log(`- ADMIN: ${admin.email}`)
+  console.log(`- COMPANY: ${companyUser.email}`)
+  console.log(`- COLLEGE: ${collegeUser.email}`)
 }
 
 main()
-  .then((res) => {
-    console.log('Seed complete', res)
-  })
-  .catch(async (e) => {
-    console.error(e)
+  .catch((error) => {
+    console.error('❌ Seed failed:', error)
     process.exit(1)
   })
   .finally(async () => {

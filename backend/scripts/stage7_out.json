@@ -1,0 +1,737 @@
+{
+  "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+  "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+  "studentIds": [
+    "ab9258cd-0381-4a14-9a7c-3149cf7b6ca6",
+    "370cd967-a1ed-440a-b4b7-2e25771545be",
+    "e83664c1-a377-472d-8aa3-1e734ca2fc56",
+    "2f0c7e21-66f6-4ed9-99cc-1b59f3aaf1ae",
+    "90934c05-6928-4407-a380-f90377cdc0ac"
+  ],
+  "outputs": [
+    {
+      "label": "CREATE",
+      "status": 201,
+      "body": {
+        "success": true,
+        "message": "Applications created successfully",
+        "data": {
+          "created": 5
+        }
+      }
+    },
+    {
+      "label": "COMPANY_VIEW",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "Applications fetched successfully",
+        "data": {
+          "applications": {
+            "411ee9f6-4ec6-460c-b42d-e28c38cfa21e": {
+              "college": {
+                "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                "name": "Alpha College",
+                "city": "City A",
+                "state": "State A"
+              },
+              "applications": [
+                {
+                  "id": "095742fa-d435-4b0c-8a4e-f3eaf64e020a",
+                  "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+                  "studentId": "ab9258cd-0381-4a14-9a7c-3149cf7b6ca6",
+                  "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                  "status": "APPLIED",
+                  "currentStage": "APPLICATIONS",
+                  "stageHistory": [
+                    {
+                      "status": "APPLIED",
+                      "movedAt": "2026-02-13T14:03:13.263Z",
+                      "toStage": "APPLICATIONS",
+                      "fromStage": null
+                    }
+                  ],
+                  "shortlistedAt": null,
+                  "shortlistedBy": null,
+                  "interviewedAt": null,
+                  "interviewedBy": null,
+                  "selectedBy": null,
+                  "rejectedAt": null,
+                  "rejectedBy": null,
+                  "selectedAt": null,
+                  "appliedAt": "2026-02-13T14:03:13.266Z",
+                  "updatedAt": "2026-02-13T14:03:13.266Z",
+                  "student": {
+                    "id": "ab9258cd-0381-4a14-9a7c-3149cf7b6ca6",
+                    "firstName": "S70",
+                    "lastName": "Candidate",
+                    "email": "s7_91393015_0@alphacollege.test",
+                    "phone": "8000000000",
+                    "course": "B.Tech",
+                    "cgpa": 8
+                  },
+                  "college": {
+                    "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                    "name": "Alpha College",
+                    "city": "City A",
+                    "state": "State A"
+                  }
+                },
+                {
+                  "id": "a69a0561-2c81-4fd8-b552-9b475617f5e1",
+                  "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+                  "studentId": "370cd967-a1ed-440a-b4b7-2e25771545be",
+                  "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                  "status": "APPLIED",
+                  "currentStage": "APPLICATIONS",
+                  "stageHistory": [
+                    {
+                      "status": "APPLIED",
+                      "movedAt": "2026-02-13T14:03:13.264Z",
+                      "toStage": "APPLICATIONS",
+                      "fromStage": null
+                    }
+                  ],
+                  "shortlistedAt": null,
+                  "shortlistedBy": null,
+                  "interviewedAt": null,
+                  "interviewedBy": null,
+                  "selectedBy": null,
+                  "rejectedAt": null,
+                  "rejectedBy": null,
+                  "selectedAt": null,
+                  "appliedAt": "2026-02-13T14:03:13.266Z",
+                  "updatedAt": "2026-02-13T14:03:13.266Z",
+                  "student": {
+                    "id": "370cd967-a1ed-440a-b4b7-2e25771545be",
+                    "firstName": "S71",
+                    "lastName": "Candidate",
+                    "email": "s7_91393015_1@alphacollege.test",
+                    "phone": "8000000001",
+                    "course": "B.Tech",
+                    "cgpa": 8
+                  },
+                  "college": {
+                    "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                    "name": "Alpha College",
+                    "city": "City A",
+                    "state": "State A"
+                  }
+                },
+                {
+                  "id": "b4c26586-72fd-4220-b6ee-75ca997a070f",
+                  "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+                  "studentId": "e83664c1-a377-472d-8aa3-1e734ca2fc56",
+                  "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                  "status": "APPLIED",
+                  "currentStage": "APPLICATIONS",
+                  "stageHistory": [
+                    {
+                      "status": "APPLIED",
+                      "movedAt": "2026-02-13T14:03:13.264Z",
+                      "toStage": "APPLICATIONS",
+                      "fromStage": null
+                    }
+                  ],
+                  "shortlistedAt": null,
+                  "shortlistedBy": null,
+                  "interviewedAt": null,
+                  "interviewedBy": null,
+                  "selectedBy": null,
+                  "rejectedAt": null,
+                  "rejectedBy": null,
+                  "selectedAt": null,
+                  "appliedAt": "2026-02-13T14:03:13.266Z",
+                  "updatedAt": "2026-02-13T14:03:13.266Z",
+                  "student": {
+                    "id": "e83664c1-a377-472d-8aa3-1e734ca2fc56",
+                    "firstName": "S72",
+                    "lastName": "Candidate",
+                    "email": "s7_91393015_2@alphacollege.test",
+                    "phone": "8000000002",
+                    "course": "B.Tech",
+                    "cgpa": 8
+                  },
+                  "college": {
+                    "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                    "name": "Alpha College",
+                    "city": "City A",
+                    "state": "State A"
+                  }
+                },
+                {
+                  "id": "f0e9699a-9aa9-4397-97a4-b72eace32e9e",
+                  "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+                  "studentId": "2f0c7e21-66f6-4ed9-99cc-1b59f3aaf1ae",
+                  "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                  "status": "APPLIED",
+                  "currentStage": "APPLICATIONS",
+                  "stageHistory": [
+                    {
+                      "status": "APPLIED",
+                      "movedAt": "2026-02-13T14:03:13.264Z",
+                      "toStage": "APPLICATIONS",
+                      "fromStage": null
+                    }
+                  ],
+                  "shortlistedAt": null,
+                  "shortlistedBy": null,
+                  "interviewedAt": null,
+                  "interviewedBy": null,
+                  "selectedBy": null,
+                  "rejectedAt": null,
+                  "rejectedBy": null,
+                  "selectedAt": null,
+                  "appliedAt": "2026-02-13T14:03:13.266Z",
+                  "updatedAt": "2026-02-13T14:03:13.266Z",
+                  "student": {
+                    "id": "2f0c7e21-66f6-4ed9-99cc-1b59f3aaf1ae",
+                    "firstName": "S73",
+                    "lastName": "Candidate",
+                    "email": "s7_91393015_3@alphacollege.test",
+                    "phone": "8000000003",
+                    "course": "B.Tech",
+                    "cgpa": 8
+                  },
+                  "college": {
+                    "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                    "name": "Alpha College",
+                    "city": "City A",
+                    "state": "State A"
+                  }
+                },
+                {
+                  "id": "6f87e015-2f96-4d8f-8ae9-06618a61dc7c",
+                  "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+                  "studentId": "90934c05-6928-4407-a380-f90377cdc0ac",
+                  "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                  "status": "APPLIED",
+                  "currentStage": "APPLICATIONS",
+                  "stageHistory": [
+                    {
+                      "status": "APPLIED",
+                      "movedAt": "2026-02-13T14:03:13.264Z",
+                      "toStage": "APPLICATIONS",
+                      "fromStage": null
+                    }
+                  ],
+                  "shortlistedAt": null,
+                  "shortlistedBy": null,
+                  "interviewedAt": null,
+                  "interviewedBy": null,
+                  "selectedBy": null,
+                  "rejectedAt": null,
+                  "rejectedBy": null,
+                  "selectedAt": null,
+                  "appliedAt": "2026-02-13T14:03:13.266Z",
+                  "updatedAt": "2026-02-13T14:03:13.266Z",
+                  "student": {
+                    "id": "90934c05-6928-4407-a380-f90377cdc0ac",
+                    "firstName": "S74",
+                    "lastName": "Candidate",
+                    "email": "s7_91393015_4@alphacollege.test",
+                    "phone": "8000000004",
+                    "course": "B.Tech",
+                    "cgpa": 8
+                  },
+                  "college": {
+                    "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                    "name": "Alpha College",
+                    "city": "City A",
+                    "state": "State A"
+                  }
+                }
+              ]
+            }
+          },
+          "pagination": {
+            "total": 5,
+            "page": 1,
+            "limit": 20,
+            "totalPages": 1
+          },
+          "stats": {
+            "total": 5,
+            "byStatus": {
+              "APPLIED": 5
+            },
+            "byStage": {
+              "APPLICATIONS": 5
+            },
+            "byCollege": {
+              "411ee9f6-4ec6-460c-b42d-e28c38cfa21e": 5
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "COLLEGE_VIEW",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "Applications fetched successfully",
+        "data": {
+          "applications": [
+            {
+              "id": "095742fa-d435-4b0c-8a4e-f3eaf64e020a",
+              "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+              "studentId": "ab9258cd-0381-4a14-9a7c-3149cf7b6ca6",
+              "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+              "status": "APPLIED",
+              "currentStage": "APPLICATIONS",
+              "stageHistory": [
+                {
+                  "status": "APPLIED",
+                  "movedAt": "2026-02-13T14:03:13.263Z",
+                  "toStage": "APPLICATIONS",
+                  "fromStage": null
+                }
+              ],
+              "shortlistedAt": null,
+              "shortlistedBy": null,
+              "interviewedAt": null,
+              "interviewedBy": null,
+              "selectedBy": null,
+              "rejectedAt": null,
+              "rejectedBy": null,
+              "selectedAt": null,
+              "appliedAt": "2026-02-13T14:03:13.266Z",
+              "updatedAt": "2026-02-13T14:03:13.266Z",
+              "student": {
+                "id": "ab9258cd-0381-4a14-9a7c-3149cf7b6ca6",
+                "firstName": "S70",
+                "lastName": "Candidate",
+                "email": "s7_91393015_0@alphacollege.test",
+                "phone": "8000000000",
+                "course": "B.Tech",
+                "cgpa": 8
+              }
+            },
+            {
+              "id": "a69a0561-2c81-4fd8-b552-9b475617f5e1",
+              "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+              "studentId": "370cd967-a1ed-440a-b4b7-2e25771545be",
+              "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+              "status": "APPLIED",
+              "currentStage": "APPLICATIONS",
+              "stageHistory": [
+                {
+                  "status": "APPLIED",
+                  "movedAt": "2026-02-13T14:03:13.264Z",
+                  "toStage": "APPLICATIONS",
+                  "fromStage": null
+                }
+              ],
+              "shortlistedAt": null,
+              "shortlistedBy": null,
+              "interviewedAt": null,
+              "interviewedBy": null,
+              "selectedBy": null,
+              "rejectedAt": null,
+              "rejectedBy": null,
+              "selectedAt": null,
+              "appliedAt": "2026-02-13T14:03:13.266Z",
+              "updatedAt": "2026-02-13T14:03:13.266Z",
+              "student": {
+                "id": "370cd967-a1ed-440a-b4b7-2e25771545be",
+                "firstName": "S71",
+                "lastName": "Candidate",
+                "email": "s7_91393015_1@alphacollege.test",
+                "phone": "8000000001",
+                "course": "B.Tech",
+                "cgpa": 8
+              }
+            },
+            {
+              "id": "b4c26586-72fd-4220-b6ee-75ca997a070f",
+              "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+              "studentId": "e83664c1-a377-472d-8aa3-1e734ca2fc56",
+              "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+              "status": "APPLIED",
+              "currentStage": "APPLICATIONS",
+              "stageHistory": [
+                {
+                  "status": "APPLIED",
+                  "movedAt": "2026-02-13T14:03:13.264Z",
+                  "toStage": "APPLICATIONS",
+                  "fromStage": null
+                }
+              ],
+              "shortlistedAt": null,
+              "shortlistedBy": null,
+              "interviewedAt": null,
+              "interviewedBy": null,
+              "selectedBy": null,
+              "rejectedAt": null,
+              "rejectedBy": null,
+              "selectedAt": null,
+              "appliedAt": "2026-02-13T14:03:13.266Z",
+              "updatedAt": "2026-02-13T14:03:13.266Z",
+              "student": {
+                "id": "e83664c1-a377-472d-8aa3-1e734ca2fc56",
+                "firstName": "S72",
+                "lastName": "Candidate",
+                "email": "s7_91393015_2@alphacollege.test",
+                "phone": "8000000002",
+                "course": "B.Tech",
+                "cgpa": 8
+              }
+            },
+            {
+              "id": "f0e9699a-9aa9-4397-97a4-b72eace32e9e",
+              "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+              "studentId": "2f0c7e21-66f6-4ed9-99cc-1b59f3aaf1ae",
+              "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+              "status": "APPLIED",
+              "currentStage": "APPLICATIONS",
+              "stageHistory": [
+                {
+                  "status": "APPLIED",
+                  "movedAt": "2026-02-13T14:03:13.264Z",
+                  "toStage": "APPLICATIONS",
+                  "fromStage": null
+                }
+              ],
+              "shortlistedAt": null,
+              "shortlistedBy": null,
+              "interviewedAt": null,
+              "interviewedBy": null,
+              "selectedBy": null,
+              "rejectedAt": null,
+              "rejectedBy": null,
+              "selectedAt": null,
+              "appliedAt": "2026-02-13T14:03:13.266Z",
+              "updatedAt": "2026-02-13T14:03:13.266Z",
+              "student": {
+                "id": "2f0c7e21-66f6-4ed9-99cc-1b59f3aaf1ae",
+                "firstName": "S73",
+                "lastName": "Candidate",
+                "email": "s7_91393015_3@alphacollege.test",
+                "phone": "8000000003",
+                "course": "B.Tech",
+                "cgpa": 8
+              }
+            },
+            {
+              "id": "6f87e015-2f96-4d8f-8ae9-06618a61dc7c",
+              "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+              "studentId": "90934c05-6928-4407-a380-f90377cdc0ac",
+              "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+              "status": "APPLIED",
+              "currentStage": "APPLICATIONS",
+              "stageHistory": [
+                {
+                  "status": "APPLIED",
+                  "movedAt": "2026-02-13T14:03:13.264Z",
+                  "toStage": "APPLICATIONS",
+                  "fromStage": null
+                }
+              ],
+              "shortlistedAt": null,
+              "shortlistedBy": null,
+              "interviewedAt": null,
+              "interviewedBy": null,
+              "selectedBy": null,
+              "rejectedAt": null,
+              "rejectedBy": null,
+              "selectedAt": null,
+              "appliedAt": "2026-02-13T14:03:13.266Z",
+              "updatedAt": "2026-02-13T14:03:13.266Z",
+              "student": {
+                "id": "90934c05-6928-4407-a380-f90377cdc0ac",
+                "firstName": "S74",
+                "lastName": "Candidate",
+                "email": "s7_91393015_4@alphacollege.test",
+                "phone": "8000000004",
+                "course": "B.Tech",
+                "cgpa": 8
+              }
+            }
+          ],
+          "pagination": {
+            "total": 5,
+            "page": 1,
+            "limit": 20,
+            "totalPages": 1
+          }
+        }
+      }
+    },
+    {
+      "label": "STATS",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "Application stats fetched successfully",
+        "data": {
+          "total": 5,
+          "byStatus": {
+            "APPLIED": 5
+          },
+          "byStage": {
+            "APPLICATIONS": 5
+          },
+          "byCollege": {
+            "411ee9f6-4ec6-460c-b42d-e28c38cfa21e": 5
+          }
+        }
+      }
+    },
+    {
+      "label": "FILTERED",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "Applications fetched successfully",
+        "data": {
+          "applications": {
+            "411ee9f6-4ec6-460c-b42d-e28c38cfa21e": {
+              "college": {
+                "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                "name": "Alpha College",
+                "city": "City A",
+                "state": "State A"
+              },
+              "applications": [
+                {
+                  "id": "095742fa-d435-4b0c-8a4e-f3eaf64e020a",
+                  "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+                  "studentId": "ab9258cd-0381-4a14-9a7c-3149cf7b6ca6",
+                  "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                  "status": "APPLIED",
+                  "currentStage": "APPLICATIONS",
+                  "stageHistory": [
+                    {
+                      "status": "APPLIED",
+                      "movedAt": "2026-02-13T14:03:13.263Z",
+                      "toStage": "APPLICATIONS",
+                      "fromStage": null
+                    }
+                  ],
+                  "shortlistedAt": null,
+                  "shortlistedBy": null,
+                  "interviewedAt": null,
+                  "interviewedBy": null,
+                  "selectedBy": null,
+                  "rejectedAt": null,
+                  "rejectedBy": null,
+                  "selectedAt": null,
+                  "appliedAt": "2026-02-13T14:03:13.266Z",
+                  "updatedAt": "2026-02-13T14:03:13.266Z",
+                  "student": {
+                    "id": "ab9258cd-0381-4a14-9a7c-3149cf7b6ca6",
+                    "firstName": "S70",
+                    "lastName": "Candidate",
+                    "email": "s7_91393015_0@alphacollege.test",
+                    "phone": "8000000000",
+                    "course": "B.Tech",
+                    "cgpa": 8
+                  },
+                  "college": {
+                    "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                    "name": "Alpha College",
+                    "city": "City A",
+                    "state": "State A"
+                  }
+                },
+                {
+                  "id": "a69a0561-2c81-4fd8-b552-9b475617f5e1",
+                  "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+                  "studentId": "370cd967-a1ed-440a-b4b7-2e25771545be",
+                  "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                  "status": "APPLIED",
+                  "currentStage": "APPLICATIONS",
+                  "stageHistory": [
+                    {
+                      "status": "APPLIED",
+                      "movedAt": "2026-02-13T14:03:13.264Z",
+                      "toStage": "APPLICATIONS",
+                      "fromStage": null
+                    }
+                  ],
+                  "shortlistedAt": null,
+                  "shortlistedBy": null,
+                  "interviewedAt": null,
+                  "interviewedBy": null,
+                  "selectedBy": null,
+                  "rejectedAt": null,
+                  "rejectedBy": null,
+                  "selectedAt": null,
+                  "appliedAt": "2026-02-13T14:03:13.266Z",
+                  "updatedAt": "2026-02-13T14:03:13.266Z",
+                  "student": {
+                    "id": "370cd967-a1ed-440a-b4b7-2e25771545be",
+                    "firstName": "S71",
+                    "lastName": "Candidate",
+                    "email": "s7_91393015_1@alphacollege.test",
+                    "phone": "8000000001",
+                    "course": "B.Tech",
+                    "cgpa": 8
+                  },
+                  "college": {
+                    "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                    "name": "Alpha College",
+                    "city": "City A",
+                    "state": "State A"
+                  }
+                },
+                {
+                  "id": "b4c26586-72fd-4220-b6ee-75ca997a070f",
+                  "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+                  "studentId": "e83664c1-a377-472d-8aa3-1e734ca2fc56",
+                  "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                  "status": "APPLIED",
+                  "currentStage": "APPLICATIONS",
+                  "stageHistory": [
+                    {
+                      "status": "APPLIED",
+                      "movedAt": "2026-02-13T14:03:13.264Z",
+                      "toStage": "APPLICATIONS",
+                      "fromStage": null
+                    }
+                  ],
+                  "shortlistedAt": null,
+                  "shortlistedBy": null,
+                  "interviewedAt": null,
+                  "interviewedBy": null,
+                  "selectedBy": null,
+                  "rejectedAt": null,
+                  "rejectedBy": null,
+                  "selectedAt": null,
+                  "appliedAt": "2026-02-13T14:03:13.266Z",
+                  "updatedAt": "2026-02-13T14:03:13.266Z",
+                  "student": {
+                    "id": "e83664c1-a377-472d-8aa3-1e734ca2fc56",
+                    "firstName": "S72",
+                    "lastName": "Candidate",
+                    "email": "s7_91393015_2@alphacollege.test",
+                    "phone": "8000000002",
+                    "course": "B.Tech",
+                    "cgpa": 8
+                  },
+                  "college": {
+                    "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                    "name": "Alpha College",
+                    "city": "City A",
+                    "state": "State A"
+                  }
+                },
+                {
+                  "id": "f0e9699a-9aa9-4397-97a4-b72eace32e9e",
+                  "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+                  "studentId": "2f0c7e21-66f6-4ed9-99cc-1b59f3aaf1ae",
+                  "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                  "status": "APPLIED",
+                  "currentStage": "APPLICATIONS",
+                  "stageHistory": [
+                    {
+                      "status": "APPLIED",
+                      "movedAt": "2026-02-13T14:03:13.264Z",
+                      "toStage": "APPLICATIONS",
+                      "fromStage": null
+                    }
+                  ],
+                  "shortlistedAt": null,
+                  "shortlistedBy": null,
+                  "interviewedAt": null,
+                  "interviewedBy": null,
+                  "selectedBy": null,
+                  "rejectedAt": null,
+                  "rejectedBy": null,
+                  "selectedAt": null,
+                  "appliedAt": "2026-02-13T14:03:13.266Z",
+                  "updatedAt": "2026-02-13T14:03:13.266Z",
+                  "student": {
+                    "id": "2f0c7e21-66f6-4ed9-99cc-1b59f3aaf1ae",
+                    "firstName": "S73",
+                    "lastName": "Candidate",
+                    "email": "s7_91393015_3@alphacollege.test",
+                    "phone": "8000000003",
+                    "course": "B.Tech",
+                    "cgpa": 8
+                  },
+                  "college": {
+                    "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                    "name": "Alpha College",
+                    "city": "City A",
+                    "state": "State A"
+                  }
+                },
+                {
+                  "id": "6f87e015-2f96-4d8f-8ae9-06618a61dc7c",
+                  "driveId": "4789c79a-584c-4bea-9d7c-78705573cfbc",
+                  "studentId": "90934c05-6928-4407-a380-f90377cdc0ac",
+                  "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                  "status": "APPLIED",
+                  "currentStage": "APPLICATIONS",
+                  "stageHistory": [
+                    {
+                      "status": "APPLIED",
+                      "movedAt": "2026-02-13T14:03:13.264Z",
+                      "toStage": "APPLICATIONS",
+                      "fromStage": null
+                    }
+                  ],
+                  "shortlistedAt": null,
+                  "shortlistedBy": null,
+                  "interviewedAt": null,
+                  "interviewedBy": null,
+                  "selectedBy": null,
+                  "rejectedAt": null,
+                  "rejectedBy": null,
+                  "selectedAt": null,
+                  "appliedAt": "2026-02-13T14:03:13.266Z",
+                  "updatedAt": "2026-02-13T14:03:13.266Z",
+                  "student": {
+                    "id": "90934c05-6928-4407-a380-f90377cdc0ac",
+                    "firstName": "S74",
+                    "lastName": "Candidate",
+                    "email": "s7_91393015_4@alphacollege.test",
+                    "phone": "8000000004",
+                    "course": "B.Tech",
+                    "cgpa": 8
+                  },
+                  "college": {
+                    "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                    "name": "Alpha College",
+                    "city": "City A",
+                    "state": "State A"
+                  }
+                }
+              ]
+            }
+          },
+          "pagination": {
+            "total": 5,
+            "page": 1,
+            "limit": 20,
+            "totalPages": 1
+          },
+          "stats": {
+            "total": 5,
+            "byStatus": {
+              "APPLIED": 5
+            },
+            "byStage": {
+              "APPLICATIONS": 5
+            },
+            "byCollege": {
+              "411ee9f6-4ec6-460c-b42d-e28c38cfa21e": 5
+            }
+          }
+        }
+      }
+    }
+  ],
+  "results": {
+    "createdCount": 5,
+    "initialOk": true,
+    "companyOk": true,
+    "collegeOk": true,
+    "statsOk": true,
+    "filteredOk": true,
+    "statusOk": true,
+    "stageOk": true
+  }
+}

@@ -12,7 +12,23 @@ class StageController {
   activateNextStage = asyncHandler(async (req, res) => {
     const { driveId } = req.params
     const result = await stageService.activateNextStage({ driveId, currentUser: req.user })
-    successResponse(res, 200, 'Next stage activated successfully', result)
+    const message = `Stage ${result.nextStage.name} activated successfully`
+    successResponse(res, 200, message, {
+      currentStage: {
+        name: result.nextStage.name,
+        status: result.nextStage.status,
+        order: result.nextStage.order,
+        startedAt: result.nextStage.startedAt
+      },
+      previousStage: {
+        name: result.currentStage.name,
+        status: 'COMPLETED'
+      },
+      drive: {
+        id: result.drive.id,
+        currentStage: result.drive.currentStage
+      }
+    })
   })
 
   progressApplicationsToStage = asyncHandler(async (req, res) => {
@@ -43,7 +59,7 @@ class StageController {
       currentUser: req.user
     })
 
-    successResponse(res, 200, `${result.rejected} applications rejected successfully`, result)
+    successResponse(res, 200, `${result.rejected} application(s) rejected`, result)
   })
 
   completeCurrentStage = asyncHandler(async (req, res) => {
@@ -53,7 +69,14 @@ class StageController {
       currentUser: req.user
     })
 
-    successResponse(res, 200, 'Current stage completed successfully', result)
+    successResponse(res, 200, `Stage ${result.stage.name} completed successfully`, {
+      stage: {
+        name: result.stage.name,
+        status: result.stage.status,
+        completedAt: result.stage.completedAt
+      },
+      drive: result.drive || null
+    })
   })
 
   getDriveStageProgress = asyncHandler(async (req, res) => {

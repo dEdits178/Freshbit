@@ -316,8 +316,10 @@ class StageService {
       applicationCounts[c.currentStage] = c._count._all
     })
 
-    const completedCount = stages.filter(s => s.status === 'COMPLETED').length
-    const completion = Math.round((completedCount / STAGE_FLOW.length) * 100)
+    const active = stages.find(s => s.status === 'ACTIVE')
+    const completion = active
+      ? Math.round((active.order / STAGE_FLOW.length) * 100)
+      : Math.round((stages.filter(s => s.status === 'COMPLETED').length / STAGE_FLOW.length) * 100)
 
     return {
       stages,

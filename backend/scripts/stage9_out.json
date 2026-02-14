@@ -1,0 +1,801 @@
+{
+  "driveId": "42e44c43-6c09-4c42-a715-d6461c8c4e26",
+  "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+  "outputs": [
+    {
+      "label": "SHORTLIST",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "3 students shortlisted successfully",
+        "data": {
+          "shortlisted": 3,
+          "notFound": [],
+          "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+          "driveId": "42e44c43-6c09-4c42-a715-d6461c8c4e26"
+        }
+      }
+    },
+    {
+      "label": "SHORTLIST_LIST",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "Shortlisted applications fetched successfully",
+        "data": {
+          "applications": [
+            {
+              "id": "5159173d-e62b-4468-b156-3f39413e81df",
+              "driveId": "42e44c43-6c09-4c42-a715-d6461c8c4e26",
+              "studentId": "20ff2b3a-eadc-45c3-9de2-5fc2accee0fd",
+              "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+              "status": "SHORTLISTED",
+              "currentStage": "SHORTLIST",
+              "stageHistory": [
+                {
+                  "status": "APPLIED",
+                  "movedAt": "2026-02-13T14:39:55.533Z",
+                  "toStage": "APPLICATIONS",
+                  "fromStage": null
+                },
+                {
+                  "movedAt": "2026-02-13T14:39:55.872Z",
+                  "movedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                  "toStage": "TEST",
+                  "toStatus": "IN_TEST",
+                  "fromStage": "APPLICATIONS",
+                  "fromStatus": null
+                },
+                {
+                  "by": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                  "action": "STAGE_TRANSITION",
+                  "status": "SHORTLISTED",
+                  "toStage": "SHORTLIST",
+                  "fromStage": "TEST",
+                  "timestamp": "2026-02-13T14:39:55.975Z"
+                }
+              ],
+              "shortlistedAt": "2026-02-13T14:39:55.974Z",
+              "shortlistedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+              "interviewedAt": null,
+              "interviewedBy": null,
+              "selectedBy": null,
+              "rejectedAt": null,
+              "rejectedBy": null,
+              "selectedAt": null,
+              "appliedAt": "2026-02-13T14:39:55.535Z",
+              "updatedAt": "2026-02-13T14:39:55.977Z",
+              "student": {
+                "id": "20ff2b3a-eadc-45c3-9de2-5fc2accee0fd",
+                "firstName": "S90",
+                "lastName": "Candidate",
+                "email": "s9_93595188_0@alphacollege.test",
+                "phone": "8200000000",
+                "course": "B.Tech",
+                "cgpa": 8.5
+              }
+            },
+            {
+              "id": "2b478678-2b01-4289-89c2-f0887e01932f",
+              "driveId": "42e44c43-6c09-4c42-a715-d6461c8c4e26",
+              "studentId": "48312959-3d20-44a6-8266-94c6178d3286",
+              "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+              "status": "SHORTLISTED",
+              "currentStage": "SHORTLIST",
+              "stageHistory": [
+                {
+                  "status": "APPLIED",
+                  "movedAt": "2026-02-13T14:39:55.533Z",
+                  "toStage": "APPLICATIONS",
+                  "fromStage": null
+                },
+                {
+                  "movedAt": "2026-02-13T14:39:55.872Z",
+                  "movedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                  "toStage": "TEST",
+                  "toStatus": "IN_TEST",
+                  "fromStage": "APPLICATIONS",
+                  "fromStatus": null
+                },
+                {
+                  "by": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                  "action": "STAGE_TRANSITION",
+                  "status": "SHORTLISTED",
+                  "toStage": "SHORTLIST",
+                  "fromStage": "TEST",
+                  "timestamp": "2026-02-13T14:39:55.975Z"
+                }
+              ],
+              "shortlistedAt": "2026-02-13T14:39:55.974Z",
+              "shortlistedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+              "interviewedAt": null,
+              "interviewedBy": null,
+              "selectedBy": null,
+              "rejectedAt": null,
+              "rejectedBy": null,
+              "selectedAt": null,
+              "appliedAt": "2026-02-13T14:39:55.535Z",
+              "updatedAt": "2026-02-13T14:39:55.977Z",
+              "student": {
+                "id": "48312959-3d20-44a6-8266-94c6178d3286",
+                "firstName": "S91",
+                "lastName": "Candidate",
+                "email": "s9_93595188_1@alphacollege.test",
+                "phone": "8200000001",
+                "course": "B.Tech",
+                "cgpa": 8.5
+              }
+            },
+            {
+              "id": "35bf2868-47c7-46ea-b91e-b74719814192",
+              "driveId": "42e44c43-6c09-4c42-a715-d6461c8c4e26",
+              "studentId": "b0739b99-4433-480e-be08-573f043c8c7e",
+              "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+              "status": "SHORTLISTED",
+              "currentStage": "SHORTLIST",
+              "stageHistory": [
+                {
+                  "status": "APPLIED",
+                  "movedAt": "2026-02-13T14:39:55.533Z",
+                  "toStage": "APPLICATIONS",
+                  "fromStage": null
+                },
+                {
+                  "movedAt": "2026-02-13T14:39:55.872Z",
+                  "movedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                  "toStage": "TEST",
+                  "toStatus": "IN_TEST",
+                  "fromStage": "APPLICATIONS",
+                  "fromStatus": null
+                },
+                {
+                  "by": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                  "action": "STAGE_TRANSITION",
+                  "status": "SHORTLISTED",
+                  "toStage": "SHORTLIST",
+                  "fromStage": "TEST",
+                  "timestamp": "2026-02-13T14:39:55.975Z"
+                }
+              ],
+              "shortlistedAt": "2026-02-13T14:39:55.974Z",
+              "shortlistedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+              "interviewedAt": null,
+              "interviewedBy": null,
+              "selectedBy": null,
+              "rejectedAt": null,
+              "rejectedBy": null,
+              "selectedAt": null,
+              "appliedAt": "2026-02-13T14:39:55.535Z",
+              "updatedAt": "2026-02-13T14:39:55.977Z",
+              "student": {
+                "id": "b0739b99-4433-480e-be08-573f043c8c7e",
+                "firstName": "S92",
+                "lastName": "Candidate",
+                "email": "s9_93595188_2@alphacollege.test",
+                "phone": "8200000002",
+                "course": "B.Tech",
+                "cgpa": 8.5
+              }
+            }
+          ],
+          "pagination": {
+            "total": 3,
+            "page": 1,
+            "limit": 20,
+            "totalPages": 1
+          }
+        }
+      }
+    },
+    {
+      "label": "COMPLETE_TEST",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "Stage TEST completed successfully",
+        "data": {
+          "stage": {
+            "name": "TEST",
+            "status": "COMPLETED",
+            "completedAt": "2026-02-13T14:39:56.110Z"
+          },
+          "drive": null
+        }
+      }
+    },
+    {
+      "label": "NEXT_SHORTLIST",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "Stage SHORTLIST activated successfully",
+        "data": {
+          "currentStage": {
+            "name": "SHORTLIST",
+            "status": "ACTIVE",
+            "order": 3,
+            "startedAt": "2026-02-13T14:39:56.158Z"
+          },
+          "previousStage": {
+            "name": "TEST",
+            "status": "COMPLETED"
+          },
+          "drive": {
+            "id": "42e44c43-6c09-4c42-a715-d6461c8c4e26",
+            "currentStage": "SHORTLIST"
+          }
+        }
+      }
+    },
+    {
+      "label": "INTERVIEW",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "2 students moved to interview successfully",
+        "data": {
+          "interviewed": 2,
+          "notFound": [],
+          "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+          "driveId": "42e44c43-6c09-4c42-a715-d6461c8c4e26"
+        }
+      }
+    },
+    {
+      "label": "INTERVIEW_LIST",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "Interview applications fetched successfully",
+        "data": {
+          "applications": [
+            {
+              "id": "5159173d-e62b-4468-b156-3f39413e81df",
+              "driveId": "42e44c43-6c09-4c42-a715-d6461c8c4e26",
+              "studentId": "20ff2b3a-eadc-45c3-9de2-5fc2accee0fd",
+              "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+              "status": "IN_INTERVIEW",
+              "currentStage": "INTERVIEW",
+              "stageHistory": [
+                {
+                  "status": "APPLIED",
+                  "movedAt": "2026-02-13T14:39:55.533Z",
+                  "toStage": "APPLICATIONS",
+                  "fromStage": null
+                },
+                {
+                  "movedAt": "2026-02-13T14:39:55.872Z",
+                  "movedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                  "toStage": "TEST",
+                  "toStatus": "IN_TEST",
+                  "fromStage": "APPLICATIONS",
+                  "fromStatus": null
+                },
+                {
+                  "by": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                  "action": "STAGE_TRANSITION",
+                  "status": "SHORTLISTED",
+                  "toStage": "SHORTLIST",
+                  "fromStage": "TEST",
+                  "timestamp": "2026-02-13T14:39:55.975Z"
+                },
+                {
+                  "by": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                  "action": "STAGE_TRANSITION",
+                  "status": "IN_INTERVIEW",
+                  "toStage": "INTERVIEW",
+                  "fromStage": "SHORTLIST",
+                  "timestamp": "2026-02-13T14:39:56.293Z"
+                }
+              ],
+              "shortlistedAt": "2026-02-13T14:39:55.974Z",
+              "shortlistedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+              "interviewedAt": "2026-02-13T14:39:56.292Z",
+              "interviewedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+              "selectedBy": null,
+              "rejectedAt": null,
+              "rejectedBy": null,
+              "selectedAt": null,
+              "appliedAt": "2026-02-13T14:39:55.535Z",
+              "updatedAt": "2026-02-13T14:39:56.295Z",
+              "student": {
+                "id": "20ff2b3a-eadc-45c3-9de2-5fc2accee0fd",
+                "firstName": "S90",
+                "lastName": "Candidate",
+                "email": "s9_93595188_0@alphacollege.test",
+                "phone": "8200000000",
+                "course": "B.Tech",
+                "cgpa": 8.5
+              }
+            },
+            {
+              "id": "2b478678-2b01-4289-89c2-f0887e01932f",
+              "driveId": "42e44c43-6c09-4c42-a715-d6461c8c4e26",
+              "studentId": "48312959-3d20-44a6-8266-94c6178d3286",
+              "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+              "status": "IN_INTERVIEW",
+              "currentStage": "INTERVIEW",
+              "stageHistory": [
+                {
+                  "status": "APPLIED",
+                  "movedAt": "2026-02-13T14:39:55.533Z",
+                  "toStage": "APPLICATIONS",
+                  "fromStage": null
+                },
+                {
+                  "movedAt": "2026-02-13T14:39:55.872Z",
+                  "movedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                  "toStage": "TEST",
+                  "toStatus": "IN_TEST",
+                  "fromStage": "APPLICATIONS",
+                  "fromStatus": null
+                },
+                {
+                  "by": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                  "action": "STAGE_TRANSITION",
+                  "status": "SHORTLISTED",
+                  "toStage": "SHORTLIST",
+                  "fromStage": "TEST",
+                  "timestamp": "2026-02-13T14:39:55.975Z"
+                },
+                {
+                  "by": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                  "action": "STAGE_TRANSITION",
+                  "status": "IN_INTERVIEW",
+                  "toStage": "INTERVIEW",
+                  "fromStage": "SHORTLIST",
+                  "timestamp": "2026-02-13T14:39:56.293Z"
+                }
+              ],
+              "shortlistedAt": "2026-02-13T14:39:55.974Z",
+              "shortlistedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+              "interviewedAt": "2026-02-13T14:39:56.292Z",
+              "interviewedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+              "selectedBy": null,
+              "rejectedAt": null,
+              "rejectedBy": null,
+              "selectedAt": null,
+              "appliedAt": "2026-02-13T14:39:55.535Z",
+              "updatedAt": "2026-02-13T14:39:56.295Z",
+              "student": {
+                "id": "48312959-3d20-44a6-8266-94c6178d3286",
+                "firstName": "S91",
+                "lastName": "Candidate",
+                "email": "s9_93595188_1@alphacollege.test",
+                "phone": "8200000001",
+                "course": "B.Tech",
+                "cgpa": 8.5
+              }
+            }
+          ],
+          "pagination": {
+            "total": 2,
+            "page": 1,
+            "limit": 20,
+            "totalPages": 1
+          }
+        }
+      }
+    },
+    {
+      "label": "COMPLETE_SHORTLIST",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "Stage SHORTLIST completed successfully",
+        "data": {
+          "stage": {
+            "name": "SHORTLIST",
+            "status": "COMPLETED",
+            "completedAt": "2026-02-13T14:39:56.398Z"
+          },
+          "drive": null
+        }
+      }
+    },
+    {
+      "label": "NEXT_INTERVIEW",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "Stage INTERVIEW activated successfully",
+        "data": {
+          "currentStage": {
+            "name": "INTERVIEW",
+            "status": "ACTIVE",
+            "order": 4,
+            "startedAt": "2026-02-13T14:39:56.600Z"
+          },
+          "previousStage": {
+            "name": "SHORTLIST",
+            "status": "COMPLETED"
+          },
+          "drive": {
+            "id": "42e44c43-6c09-4c42-a715-d6461c8c4e26",
+            "currentStage": "INTERVIEW"
+          }
+        }
+      }
+    },
+    {
+      "label": "FINALIZE",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "1 students finalized successfully",
+        "data": {
+          "selected": 1,
+          "notFound": [],
+          "driveCollege": {
+            "driveId": "42e44c43-6c09-4c42-a715-d6461c8c4e26",
+            "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+            "finalized": true,
+            "finalizedAt": "2026-02-13T14:39:56.690Z",
+            "finalizedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+            "selectedCount": 1
+          }
+        }
+      }
+    },
+    {
+      "label": "COMPLETE_INTERVIEW",
+      "status": 400,
+      "body": {
+        "success": false,
+        "message": "Drive already locked",
+        "error": "Error: Drive already locked\n    at StageService.completeCurrentStage (C:\\Users\\user\\OneDrive\\Desktop\\Tech\\Freshbit_platfrom\\freshbit\\backend\\src\\modules\\stage\\stage.service.js:241:31)\n    at async C:\\Users\\user\\OneDrive\\Desktop\\Tech\\Freshbit_platfrom\\freshbit\\backend\\src\\modules\\stage\\stage.controller.js:67:20"
+      }
+    },
+    {
+      "label": "NEXT_FINAL",
+      "status": 400,
+      "body": {
+        "success": false,
+        "message": "Current stage must be completed before activating next stage",
+        "error": "Error: Current stage must be completed before activating next stage\n    at StageService.activateNextStage (C:\\Users\\user\\OneDrive\\Desktop\\Tech\\Freshbit_platfrom\\freshbit\\backend\\src\\modules\\stage\\stage.service.js:71:13)\n    at async C:\\Users\\user\\OneDrive\\Desktop\\Tech\\Freshbit_platfrom\\freshbit\\backend\\src\\modules\\stage\\stage.controller.js:14:20"
+      }
+    },
+    {
+      "label": "FINAL_LIST_COMPANY",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "Final selections fetched successfully",
+        "data": {
+          "applications": {
+            "411ee9f6-4ec6-460c-b42d-e28c38cfa21e": {
+              "college": {
+                "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                "name": "Alpha College"
+              },
+              "applications": [
+                {
+                  "id": "5159173d-e62b-4468-b156-3f39413e81df",
+                  "driveId": "42e44c43-6c09-4c42-a715-d6461c8c4e26",
+                  "studentId": "20ff2b3a-eadc-45c3-9de2-5fc2accee0fd",
+                  "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                  "status": "SELECTED",
+                  "currentStage": "FINAL",
+                  "stageHistory": [
+                    {
+                      "status": "APPLIED",
+                      "movedAt": "2026-02-13T14:39:55.533Z",
+                      "toStage": "APPLICATIONS",
+                      "fromStage": null
+                    },
+                    {
+                      "movedAt": "2026-02-13T14:39:55.872Z",
+                      "movedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                      "toStage": "TEST",
+                      "toStatus": "IN_TEST",
+                      "fromStage": "APPLICATIONS",
+                      "fromStatus": null
+                    },
+                    {
+                      "by": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                      "action": "STAGE_TRANSITION",
+                      "status": "SHORTLISTED",
+                      "toStage": "SHORTLIST",
+                      "fromStage": "TEST",
+                      "timestamp": "2026-02-13T14:39:55.975Z"
+                    },
+                    {
+                      "by": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                      "action": "STAGE_TRANSITION",
+                      "status": "IN_INTERVIEW",
+                      "toStage": "INTERVIEW",
+                      "fromStage": "SHORTLIST",
+                      "timestamp": "2026-02-13T14:39:56.293Z"
+                    },
+                    {
+                      "by": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                      "action": "STAGE_TRANSITION",
+                      "status": "SELECTED",
+                      "toStage": "FINAL",
+                      "fromStage": "INTERVIEW",
+                      "timestamp": "2026-02-13T14:39:56.692Z"
+                    }
+                  ],
+                  "shortlistedAt": "2026-02-13T14:39:55.974Z",
+                  "shortlistedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                  "interviewedAt": "2026-02-13T14:39:56.292Z",
+                  "interviewedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                  "selectedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+                  "rejectedAt": null,
+                  "rejectedBy": null,
+                  "selectedAt": "2026-02-13T14:39:56.690Z",
+                  "appliedAt": "2026-02-13T14:39:55.535Z",
+                  "updatedAt": "2026-02-13T14:39:56.693Z",
+                  "student": {
+                    "id": "20ff2b3a-eadc-45c3-9de2-5fc2accee0fd",
+                    "firstName": "S90",
+                    "lastName": "Candidate",
+                    "email": "s9_93595188_0@alphacollege.test",
+                    "phone": "8200000000",
+                    "course": "B.Tech",
+                    "cgpa": 8.5
+                  },
+                  "college": {
+                    "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                    "name": "Alpha College"
+                  }
+                }
+              ]
+            }
+          },
+          "pagination": {
+            "total": 1,
+            "page": 1,
+            "limit": 20,
+            "totalPages": 1
+          },
+          "stats": {
+            "selected": 1,
+            "byCollege": {
+              "411ee9f6-4ec6-460c-b42d-e28c38cfa21e": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "label": "STATS",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "Selection stats fetched successfully",
+        "data": {
+          "byStatus": {
+            "SHORTLISTED": 1,
+            "IN_INTERVIEW": 1,
+            "SELECTED": 1,
+            "REJECTED": 1
+          },
+          "byCollege": [
+            {
+              "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+              "collegeName": "Alpha College",
+              "shortlisted": 1,
+              "interviewed": 1,
+              "selected": 1,
+              "finalized": true,
+              "finalizedAt": "2026-02-13T14:39:56.690Z",
+              "finalizedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+              "shortlistSubmitted": true,
+              "shortlistSubmittedAt": "2026-02-13T14:39:55.974Z",
+              "interviewListSubmitted": true,
+              "interviewListSubmittedAt": "2026-02-13T14:39:56.292Z"
+            }
+          ],
+          "metadata": {
+            "totalApplications": 5,
+            "finalizedColleges": 1,
+            "pendingColleges": 0
+          }
+        }
+      }
+    },
+    {
+      "label": "COMPLETE_FINAL",
+      "status": 400,
+      "body": {
+        "success": false,
+        "message": "Drive already locked",
+        "error": "Error: Drive already locked\n    at StageService.completeCurrentStage (C:\\Users\\user\\OneDrive\\Desktop\\Tech\\Freshbit_platfrom\\freshbit\\backend\\src\\modules\\stage\\stage.service.js:241:31)\n    at async C:\\Users\\user\\OneDrive\\Desktop\\Tech\\Freshbit_platfrom\\freshbit\\backend\\src\\modules\\stage\\stage.controller.js:67:20"
+      }
+    },
+    {
+      "label": "FINALIZE_LOCKED_FAIL",
+      "status": 400,
+      "body": {
+        "success": false,
+        "message": "Drive locked. Cannot modify selections",
+        "error": "Error: Drive locked. Cannot modify selections\n    at SelectionService.finalizeSelections (C:\\Users\\user\\OneDrive\\Desktop\\Tech\\Freshbit_platfrom\\freshbit\\backend\\src\\modules\\selection\\selection.service.js:545:31)\n    at async C:\\Users\\user\\OneDrive\\Desktop\\Tech\\Freshbit_platfrom\\freshbit\\backend\\src\\modules\\selection\\selection.controller.js:48:20"
+      }
+    },
+    {
+      "label": "CLOSE_COLLEGE",
+      "status": 400,
+      "body": {
+        "success": false,
+        "message": "Drive already locked",
+        "error": "Error: Drive already locked\n    at SelectionService.closeCollegeDrive (C:\\Users\\user\\OneDrive\\Desktop\\Tech\\Freshbit_platfrom\\freshbit\\backend\\src\\modules\\selection\\selection.service.js:1029:31)\n    at async C:\\Users\\user\\OneDrive\\Desktop\\Tech\\Freshbit_platfrom\\freshbit\\backend\\src\\modules\\selection\\selection.controller.js:156:20"
+      }
+    },
+    {
+      "label": "DRIVE_OVERVIEW",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "Drive retrieved successfully",
+        "data": {
+          "id": "42e44c43-6c09-4c42-a715-d6461c8c4e26",
+          "companyId": "ce889d95-442e-4736-9623-1966693ce4dc",
+          "roleTitle": "Stage9 QA 93595188",
+          "salary": 900000,
+          "description": "Stage9 selection verification 93595188",
+          "status": "CLOSED",
+          "jdFileUrl": null,
+          "currentStage": "INTERVIEW",
+          "isLocked": true,
+          "lockedAt": "2026-02-13T14:39:56.690Z",
+          "createdAt": "2026-02-13T14:39:55.190Z",
+          "updatedAt": "2026-02-13T14:39:56.710Z",
+          "company": {
+            "id": "ce889d95-442e-4736-9623-1966693ce4dc",
+            "name": "FreshBit Co",
+            "domain": "freshbit.example"
+          },
+          "driveColleges": [
+            {
+              "id": "bd1cdfb4-b41d-433a-af6a-98205799bbfe",
+              "driveId": "42e44c43-6c09-4c42-a715-d6461c8c4e26",
+              "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+              "invitationStatus": "ACCEPTED",
+              "managedBy": "COLLEGE",
+              "startedAt": null,
+              "studentsUploaded": false,
+              "studentCount": 0,
+              "shortlistSubmitted": true,
+              "shortlistSubmittedAt": "2026-02-13T14:39:55.974Z",
+              "interviewListSubmitted": true,
+              "interviewListSubmittedAt": "2026-02-13T14:39:56.292Z",
+              "finalized": true,
+              "finalizedAt": "2026-02-13T14:39:56.690Z",
+              "finalizedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+              "shortlistedCount": 3,
+              "interviewedCount": 2,
+              "selectedCount": 1,
+              "createdAt": "2026-02-13T14:39:55.216Z",
+              "college": {
+                "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+                "name": "Alpha College",
+                "city": "City A",
+                "state": "State A"
+              }
+            }
+          ],
+          "stages": [
+            {
+              "id": "6133f8a4-353b-472b-95b8-7a2f1ffb6261",
+              "name": "APPLICATIONS",
+              "order": 1,
+              "status": "COMPLETED",
+              "startedAt": "2026-02-13T14:39:55.462Z",
+              "completedAt": "2026-02-13T14:39:55.604Z"
+            },
+            {
+              "id": "3318497e-4aa8-41ac-babf-62ee4f11ff62",
+              "name": "TEST",
+              "order": 2,
+              "status": "COMPLETED",
+              "startedAt": "2026-02-13T14:39:55.649Z",
+              "completedAt": "2026-02-13T14:39:56.110Z"
+            },
+            {
+              "id": "55d07b85-885d-4566-b7e5-2575efb13b46",
+              "name": "SHORTLIST",
+              "order": 3,
+              "status": "COMPLETED",
+              "startedAt": "2026-02-13T14:39:56.158Z",
+              "completedAt": "2026-02-13T14:39:56.398Z"
+            },
+            {
+              "id": "67618415-6a47-4b04-8955-320e85b8f7f4",
+              "name": "INTERVIEW",
+              "order": 4,
+              "status": "ACTIVE",
+              "startedAt": "2026-02-13T14:39:56.600Z",
+              "completedAt": null
+            },
+            {
+              "id": "eafde4cd-c8cf-41ef-b46c-c0109bc97945",
+              "name": "FINAL",
+              "order": 5,
+              "status": "PENDING",
+              "startedAt": null,
+              "completedAt": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "label": "APPLICATION_STATS",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "Application stats fetched successfully",
+        "data": {
+          "total": 5,
+          "byStatus": {
+            "IN_TEST": 1,
+            "SHORTLISTED": 1,
+            "IN_INTERVIEW": 1,
+            "SELECTED": 1,
+            "REJECTED": 1
+          },
+          "byStage": {
+            "APPLICATIONS": 1,
+            "TEST": 1,
+            "SHORTLIST": 1,
+            "INTERVIEW": 1,
+            "FINAL": 1
+          },
+          "byCollege": {
+            "411ee9f6-4ec6-460c-b42d-e28c38cfa21e": 5
+          }
+        }
+      }
+    },
+    {
+      "label": "CLOSE_COLLEGE_2",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "College drive closed successfully",
+        "data": {
+          "driveCollege": {
+            "id": "36e9c9a0-6260-45d3-869e-0cd4ca140da4",
+            "driveId": "638c95d5-d450-4aa8-ab03-815a741451ac",
+            "collegeId": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+            "invitationStatus": "ACCEPTED",
+            "managedBy": "COLLEGE",
+            "startedAt": null,
+            "studentsUploaded": false,
+            "studentCount": 0,
+            "shortlistSubmitted": false,
+            "shortlistSubmittedAt": null,
+            "interviewListSubmitted": false,
+            "interviewListSubmittedAt": null,
+            "finalized": true,
+            "finalizedAt": "2026-02-13T14:39:57.156Z",
+            "finalizedBy": "16cfec1e-2d1e-4c58-a5f6-7d187e1e3ca4",
+            "shortlistedCount": 0,
+            "interviewedCount": 0,
+            "selectedCount": 0,
+            "createdAt": "2026-02-13T14:39:57.104Z",
+            "college": {
+              "id": "411ee9f6-4ec6-460c-b42d-e28c38cfa21e",
+              "name": "Alpha College"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "verified": {
+    "shortlistOk": true,
+    "shortlistListOk": true,
+    "interviewOk": true,
+    "interviewListOk": true,
+    "finalizeOk": true,
+    "statsOk": true,
+    "finalCompleteOk": true,
+    "lockedModifyFailOk": true,
+    "closeOk": true,
+    "overviewOk": true,
+    "stageFlowOk": true,
+    "appStatsOk": true
+  }
+}

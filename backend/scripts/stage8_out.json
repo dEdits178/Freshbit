@@ -1,0 +1,113 @@
+{
+  "driveId": "6ad754b3-884d-4536-b26b-83d005a4f646",
+  "collegeId": "500566a0-547c-4e49-90cb-b30c49d5a33a",
+  "outputs": [
+    {
+      "label": "INIT",
+      "status": 400,
+      "body": {
+        "success": false,
+        "message": "Database validation error",
+        "data": null,
+        "errors": null
+      }
+    },
+    {
+      "label": "PROGRESS",
+      "status": 400,
+      "body": {
+        "success": false,
+        "message": "Database validation error",
+        "data": null,
+        "errors": null
+      }
+    },
+    {
+      "label": "COMPLETE",
+      "status": 400,
+      "body": {
+        "success": false,
+        "message": "Database validation error",
+        "data": null,
+        "errors": null
+      }
+    },
+    {
+      "label": "NEXT",
+      "status": 400,
+      "body": {
+        "success": false,
+        "message": "Database validation error",
+        "data": null,
+        "errors": null
+      }
+    },
+    {
+      "label": "MOVE_TEST",
+      "status": 400,
+      "body": {
+        "success": false,
+        "message": "applicationIds must be a non-empty array",
+        "data": null,
+        "errors": null
+      }
+    },
+    {
+      "label": "SKIP_FAIL",
+      "status": 400,
+      "body": {
+        "success": false,
+        "message": "applicationIds must be a non-empty array",
+        "data": null,
+        "errors": null
+      }
+    },
+    {
+      "label": "REJECT",
+      "status": 400,
+      "body": {
+        "success": false,
+        "message": "applicationIds must be a non-empty array",
+        "data": null,
+        "errors": null
+      }
+    },
+    {
+      "label": "REJECTED_LIST",
+      "status": 200,
+      "body": {
+        "success": true,
+        "message": "Applications fetched successfully",
+        "data": {
+          "applications": {},
+          "pagination": {
+            "total": 0,
+            "page": 1,
+            "limit": 20,
+            "totalPages": 0
+          },
+          "stats": {
+            "total": 0,
+            "byStatus": {},
+            "byStage": {},
+            "byCollege": {}
+          }
+        },
+        "errors": null
+      }
+    }
+  ],
+  "verified": {
+    "initOk": false,
+    "applicationsActive": false,
+    "progressOk": false,
+    "completeOk": false,
+    "nextOk": false,
+    "driveStageOk": false,
+    "movedOk": false,
+    "statusUpdatedOk": false,
+    "skipFailOk": true,
+    "rejectOk": false,
+    "rejectedListOk": false
+  }
+}

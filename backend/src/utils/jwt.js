@@ -1,20 +1,51 @@
+const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 
-const generateToken = (payload) => {
-  return jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN || '7d'
-  })
+const JWT_SECRET = process.env.JWT_SECRET
+const ACCESS_EXPIRY = process.env.JWT_ACCESS_EXPIRY || '15m'
+const REFRESH_EXPIRY = process.env.JWT_REFRESH_EXPIRY || '7d'
+
+const getJwtSecret = () => {
+  if (!JWT_SECRET) {
+    const error = new Error('JWT_SECRET is required in environment variables')
+    error.statusCode = 500
+    throw error
+  }
+  return JWT_SECRET
 }
 
-const verifyToken = (token) => {
-  try {
-    return jwt.verify(token, process.env.JWT_SECRET)
-  } catch (error) {
-    throw new Error('Invalid or expired token')
-  }
+const generateAccessToken = (userId, role) => {
+  return jwt.sign({ userId, role }, getJwtSecret(), { expiresIn: ACCESS_EXPIRY })
 }
+
+const generateRefreshToken = (userId) => {
+  return jwt.sign({ userId, type: 'refresh' }, getJwtSecret(), { expiresIn: REFRESH_EXPIRY })
+}
+
+const verifyAccessToken = (token) => jwt.verify(token, getJwtSecret())
+
+const verifyRefreshToken = (token) => {
+  const payload = jwt.verify(token, getJwtSecret())
+  if (payload.type !== 'refresh') {
+    const err = new Error('Invalid refresh token type')
+    err.name = 'JsonWebTokenError'
+    throw err
+  }
+  return payload
+}
+
+const generateResetToken = () => crypto.randomBytes(32).toString('hex')
+
+const generateVerificationToken = () => crypto.randomBytes(32).toString('hex')
 
 module.exports = {
-  generateToken,
-  verifyToken
+  generateAccessToken,
+  generateRefreshToken,
+  verifyAccessToken,
+  verifyRefreshToken,
+  generateResetToken,
+  generateVerificationToken,
+  // Backward-compatible aliases for older modules.
+  generateToken: (payload) => jwt.sign(payload, getJwtSecret(), { expiresIn: REFRESH_EXPIRY }),
+  verifyToken: verifyAccessToken
 }

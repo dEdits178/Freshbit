@@ -26,7 +26,7 @@ enum DriveStatus {
   CLOSED
 }
 
-enum StageType {
+enum StageName {
   APPLICATIONS
   TEST
   SHORTLIST
@@ -47,6 +47,15 @@ enum FileType {
   FINAL_LIST
 }
 
+enum ApplicationStatus {
+  APPLIED
+  IN_TEST
+  SHORTLISTED
+  IN_INTERVIEW
+  SELECTED
+  REJECTED
+}
+
 enum InvitationStatus {
   PENDING
   ACCEPTED
@@ -56,15 +65,6 @@ enum InvitationStatus {
 enum ManagedBy {
   COLLEGE
   ADMIN
-}
-
-enum ApplicationStatus {
-  APPLIED
-  IN_TEST
-  SHORTLISTED
-  IN_INTERVIEW
-  SELECTED
-  REJECTED
 }
 
 model User {
@@ -107,7 +107,7 @@ model College {
   students      Student[]
   fileUploads   FileUpload[]
   driveStudents DriveStudent[]
-  applications Application[]
+  applications  Application[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }
@@ -120,10 +120,10 @@ model Drive {
   salary        Int
   description   String
   status        DriveStatus
-  jdFileUrl     String?
-  currentStage  StageType       @default(APPLICATIONS)
-  isLocked      Boolean         @default(false)
+  currentStage  String
+  isLocked      Boolean        @default(false)
   lockedAt      DateTime?
+  jdFileUrl     String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   driveColleges DriveCollege[]
@@ -131,7 +131,7 @@ model Drive {
   stages        Stage[]
   fileUploads   FileUpload[]
   driveStudents DriveStudent[]
-  
+
   @@index([companyId])
   @@index([status])
 }
@@ -143,22 +143,10 @@ model DriveCollege {
   invitationStatus InvitationStatus @default(PENDING)
   managedBy        ManagedBy?
   startedAt        DateTime?
-  studentsUploaded Boolean          @default(false)
-  studentCount     Int              @default(0)
-  shortlistSubmitted       Boolean  @default(false)
-  shortlistSubmittedAt     DateTime?
-  interviewListSubmitted   Boolean  @default(false)
-  interviewListSubmittedAt DateTime?
-  finalized                Boolean  @default(false)
-  finalizedAt              DateTime?
-  finalizedBy              String?
-  shortlistedCount         Int      @default(0)
-  interviewedCount         Int      @default(0)
-  selectedCount            Int      @default(0)
   drive            Drive            @relation(fields: [driveId], references: [id])
   college          College          @relation(fields: [collegeId], references: [id])
   createdAt        DateTime         @default(now())
-  
+
   @@unique([driveId, collegeId])
   @@index([driveId])
   @@index([collegeId])
@@ -178,7 +166,7 @@ model Student {
   applications Application[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  
+
   @@unique([email, collegeId])
   @@index([collegeId])
 }
@@ -188,13 +176,11 @@ model DriveStudent {
   driveId          String
   studentId        String
   collegeId        String
-  applicationId    String?   @unique
-  application      Application? @relation(fields: [applicationId], references: [id])
   drive            Drive    @relation(fields: [driveId], references: [id], onDelete: Cascade)
   student          Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   college          College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
   createdAt        DateTime @default(now())
-  
+
   @@unique([driveId, studentId])
   @@index([driveId])
   @@index([collegeId])
@@ -206,55 +192,32 @@ model Application {
   studentId     String
   collegeId     String
   
-  // Current status in pipeline
   status        ApplicationStatus @default(APPLIED)
-  
-  // Stage tracking
-  currentStage  StageType @default(APPLICATIONS)
-  stageHistory  Json?
-  shortlistedAt DateTime?
-  shortlistedBy String?
-  interviewedAt DateTime?
-  interviewedBy String?
-  selectedBy    String?
-  rejectedAt    DateTime?
-  rejectedBy    String?
+  currentStage  String   @default("APPLICATIONS")
   selectedAt    DateTime?
-  
-  // Metadata
+  rejectedAt    DateTime?
+  stageHistory  Json?
   appliedAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   
-  // Relations
   drive         Drive    @relation(fields: [driveId], references: [id], onDelete: Cascade)
   student       Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   college       College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
-  driveStudents DriveStudent[]
   
   @@unique([driveId, studentId])
   @@index([driveId])
   @@index([studentId])
-  @@index([collegeId])
-  @@index([status])
-  @@index([currentStage])
 }
 
 model Stage {
   id          String      @id @default(uuid())
   driveId     String
-  name        StageType
-  status      StageStatus @default(PENDING)
+  drive       Drive       @relation(fields: [driveId], references: [id], onDelete: Cascade)
+  name        StageName
   order       Int
+  status      StageStatus
   startedAt   DateTime?
   completedAt DateTime?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-
-  drive       Drive       @relation(fields: [driveId], references: [id], onDelete: Cascade)
-
-  @@unique([driveId, name])
-  @@index([driveId])
-  @@index([status])
 }
 
 model FileUpload {
@@ -272,7 +235,7 @@ model FileUpload {
   uploadedByUserId String
   uploadedBy   User     @relation(fields: [uploadedByUserId], references: [id])
   createdAt    DateTime @default(now())
-  
+
   @@index([driveId])
   @@index([collegeId])
   @@index([uploadedByUserId])
@@ -286,6 +249,6 @@ model AuditLog {
   entity    String
   entityId  String
   createdAt DateTime @default(now())
-  
+
   @@index([actorId])
 }
