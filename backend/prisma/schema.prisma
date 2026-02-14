@@ -137,19 +137,56 @@ model Drive {
 }
 
 model DriveCollege {
-  id               String           @id @default(uuid())
+  id               String             @id @default(uuid())
   driveId          String
   collegeId        String
-  invitationStatus InvitationStatus @default(PENDING)
+  invitationStatus InvitationStatus   @default(PENDING)
   managedBy        ManagedBy?
   startedAt        DateTime?
-  drive            Drive            @relation(fields: [driveId], references: [id])
-  college          College          @relation(fields: [collegeId], references: [id])
-  createdAt        DateTime         @default(now())
+  isLocked         Boolean            @default(false)
+  completedAt      DateTime?
+  currentStage     String             @default("APPLICATIONS")
+  stageHistory     Json?
+  drive            Drive              @relation(fields: [driveId], references: [id])
+  college          College            @relation(fields: [collegeId], references: [id])
+  stageProgress    DriveCollegeStage[]
+  uploadLogs       DriveCollegeUpload[]
+  createdAt        DateTime           @default(now())
 
   @@unique([driveId, collegeId])
   @@index([driveId])
   @@index([collegeId])
+}
+
+model DriveCollegeStage {
+  id              String        @id @default(uuid())
+  driveCollegeId  String
+  name            StageName
+  order           Int
+  status          StageStatus   @default(PENDING)
+  startedAt       DateTime?
+  completedAt     DateTime?
+  completedBy     String?
+  driveCollege    DriveCollege @relation(fields: [driveCollegeId], references: [id], onDelete: Cascade)
+
+  @@unique([driveCollegeId, name])
+  @@index([driveCollegeId])
+}
+
+model DriveCollegeUpload {
+  id             String      @id @default(uuid())
+  driveCollegeId String
+  stage          String
+  fileName       String
+  fileType       String
+  totalRecords   Int
+  validRecords   Int
+  invalidRecords Int
+  uploadedBy     String
+  uploadedAt     DateTime    @default(now())
+  driveCollege   DriveCollege @relation(fields: [driveCollegeId], references: [id], onDelete: Cascade)
+
+  @@index([driveCollegeId])
 }
 
 model Student {

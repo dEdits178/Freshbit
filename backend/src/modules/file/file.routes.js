@@ -37,10 +37,15 @@ collegeRouter.post('/files/:fileId/convert',
   fileController.convertCollege
 )
 
+collegeRouter.get('/files/:fileId/export',
+  fileController.exportCollege
+)
+
 // ADMIN (convert only)
 const adminRouter = express.Router()
 adminRouter.use(requireRole('ADMIN'))
 adminRouter.post('/files/:fileId/convert', fileController.convertAdmin)
+adminRouter.get('/files/:fileId/export', fileController.exportAdmin)
 
 // COMMON: secure file streaming (College, Company, Admin)
 router.get('/files/:fileId', fileController.getFile)

@@ -42,10 +42,16 @@ app.use('/api/auth', authRoutes)
 // Admin routes
 app.use('/api/admin', adminRoutes)
 
+// College routes
+app.use('/api/college', require('./modules/college/college.routes'))
+
 // Core modules
 app.use('/api/drives', require('./modules/drive/drive.routes'))
 app.use('/api/stages', require('./modules/stage/stage.routes'))
 app.use('/api/applications', require('./modules/application/application.routes'))
+app.use('/api/files', require('./modules/file/file.routes'))
+app.use('/api/company', require('./modules/companyCollege/companyCollege.routes'))
+app.use('/api/selection', require('./modules/selection/selection.routes'))
 
 // 404 for unknown endpoints
 app.use((req, res, next) => {

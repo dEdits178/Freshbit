@@ -140,6 +140,84 @@ class FileService {
     throw new AppError('Conversion not supported for this file type yet', 400)
   }
 
+  async exportFileCollege(collegeUserId, fileId, format) {
+    const file = await prisma.fileUpload.findUnique({ where: { id: fileId } })
+    if (!file) throw new AppError('File not found', 404)
+    if (file.uploadedByUserId !== collegeUserId) {
+      throw new AppError('You can only export files you uploaded', 403)
+    }
+    return this.exportByType(file, format)
+  }
+
+  async exportFileAdmin(fileId, format) {
+    const file = await prisma.fileUpload.findUnique({
+      where: { id: fileId }
+    })
+    if (!file) throw new AppError('File not found', 404)
+    if (!file.driveId || !file.collegeId) throw new AppError('File metadata incomplete', 400)
+    const driveCollege = await prisma.driveCollege.findUnique({
+      where: { driveId_collegeId: { driveId: file.driveId, collegeId: file.collegeId } }
+    })
+    if (!driveCollege || driveCollege.managedBy !== 'ADMIN') {
+      throw new AppError('Admin export not permitted for this file', 403)
+    }
+    return this.exportByType(file, format)
+  }
+
+  async exportByType(file, format) {
+    const mime = file.mimeType
+    const filePath = file.fileUrl
+    const lowerFormat = String(format || '').toLowerCase()
+    if (!['csv', 'xlsx'].includes(lowerFormat)) {
+      throw new AppError('Invalid export format', 400)
+    }
+    if (mime === 'text/csv') {
+      const content = fs.readFileSync(filePath, 'utf-8')
+      const records = parse(content, { columns: true, skip_empty_lines: true })
+      const wb = xlsx.utils.book_new()
+      const ws = xlsx.utils.json_to_sheet(records)
+      xlsx.utils.book_append_sheet(wb, ws, 'Sheet1')
+      if (lowerFormat === 'csv') {
+        const out = xlsx.write(wb, { bookType: 'csv', type: 'string' })
+        return {
+          fileName: `${path.basename(file.fileName, path.extname(file.fileName))}.csv`,
+          mimeType: 'text/csv',
+          content: Buffer.from(out, 'utf-8')
+        }
+      }
+      const out = xlsx.write(wb, { bookType: 'xlsx', type: 'buffer' })
+      return {
+        fileName: `${path.basename(file.fileName, path.extname(file.fileName))}.xlsx`,
+        mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        content: out
+      }
+    }
+    if (mime === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || mime === 'application/vnd.ms-excel') {
+      const wb = xlsx.readFile(filePath)
+      const sheetName = wb.SheetNames[0]
+      const sheet = wb.Sheets[sheetName]
+      const json = xlsx.utils.sheet_to_json(sheet, { defval: '' })
+      const outWb = xlsx.utils.book_new()
+      const outWs = xlsx.utils.json_to_sheet(json)
+      xlsx.utils.book_append_sheet(outWb, outWs, 'Sheet1')
+      if (lowerFormat === 'csv') {
+        const out = xlsx.write(outWb, { bookType: 'csv', type: 'string' })
+        return {
+          fileName: `${path.basename(file.fileName, path.extname(file.fileName))}.csv`,
+          mimeType: 'text/csv',
+          content: Buffer.from(out, 'utf-8')
+        }
+      }
+      const out = xlsx.write(outWb, { bookType: 'xlsx', type: 'buffer' })
+      return {
+        fileName: `${path.basename(file.fileName, path.extname(file.fileName))}.xlsx`,
+        mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        content: out
+      }
+    }
+    throw new AppError('Export not supported for this file type yet', 400)
+  }
+
   toPreview(rows) {
     const columnsSet = new Set()
     const normalizedRows = rows.map((row) => {

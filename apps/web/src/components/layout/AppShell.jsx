@@ -13,6 +13,8 @@ const titleMap = {
   '/admin/settings': { title: 'Settings', subtitle: 'Configure system policies and preferences' },
   '/company': { title: 'Company Dashboard', subtitle: 'Manage campus pipeline and hiring funnel' },
   '/company/drives': { title: 'My Drives', subtitle: 'Oversee all active and upcoming drives' },
+  '/company/drives/create': { title: 'Create Drive', subtitle: 'Define role and invite colleges' },
+  '/company/drives/:id': { title: 'Drive Details', subtitle: 'Comprehensive drive overview' },
   '/company/colleges': { title: 'Colleges', subtitle: 'Campus relationship and invitation management' },
   '/company/applications': { title: 'Applications', subtitle: 'Track student applications and outcomes' },
   '/company/schedule': { title: 'Schedule', subtitle: 'Interview and event calendar overview' },

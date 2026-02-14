@@ -39,6 +39,24 @@ class FileController {
     const preview = await fileService.convertFileAdmin(fileId)
     successResponse(res, 200, 'Conversion successful', preview)
   })
+
+  exportCollege = asyncHandler(async (req, res) => {
+    const { fileId } = req.params
+    const { format } = req.query
+    const result = await fileService.exportFileCollege(req.user.id, fileId, format || 'csv')
+    res.setHeader('Content-Type', result.mimeType)
+    res.setHeader('Content-Disposition', `attachment; filename="${result.fileName}"`)
+    res.send(result.content)
+  })
+
+  exportAdmin = asyncHandler(async (req, res) => {
+    const { fileId } = req.params
+    const { format } = req.query
+    const result = await fileService.exportFileAdmin(fileId, format || 'csv')
+    res.setHeader('Content-Type', result.mimeType)
+    res.setHeader('Content-Disposition', `attachment; filename="${result.fileName}"`)
+    res.send(result.content)
+  })
 }
 
 module.exports = new FileController()

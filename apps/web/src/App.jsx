@@ -22,9 +22,20 @@ import ManageColleges from './pages/admin/ManageColleges';
 import ManageCompanies from './pages/admin/ManageCompanies';
 import Analytics from './pages/admin/Analytics';
 import DriveDetails from './pages/admin/DriveDetails';
-import CompanyDashboard from './pages/dashboard/CompanyDashboard';
-import CollegeDashboard from './pages/dashboard/CollegeDashboard';
+import CompanyDashboard from './pages/company/CompanyDashboard';
+import CollegeDashboard from './pages/college/CollegeDashboard';
+import Invitations from './pages/college/Invitations';
+import CollegeDriveDetailsPage from './pages/college/DriveDetails';
+import UploadStudents from './pages/college/UploadStudents';
+import ViewStudents from './pages/college/ViewStudents';
 import ModulePlaceholder from './pages/dashboard/ModulePlaceholder';
+import MyDrives from './pages/company/MyDrives';
+import CreateDrive from './pages/company/CreateDrive';
+import CompanyDriveDetails from './pages/company/DriveDetails';
+import ViewApplications from './pages/company/ViewApplications';
+import FinalSelections from './pages/company/FinalSelections';
+import BrowseColleges from './pages/company/BrowseColleges';
+import CollegeDriveDetails from './pages/company/CollegeDriveDetails';
 
 const App = () => {
   const location = useLocation();
@@ -82,8 +93,13 @@ const App = () => {
           <Route element={<ProtectedRoute allowedRoles={['COMPANY']} />}>
             <Route element={<AppShell />}>
               <Route path="/company" element={<CompanyDashboard />} />
-              <Route path="/company/drives" element={<ModulePlaceholder title="My Drives" />} />
-              <Route path="/company/colleges" element={<ModulePlaceholder title="Colleges" />} />
+              <Route path="/company/drives" element={<MyDrives />} />
+              <Route path="/company/drives/create" element={<CreateDrive />} />
+              <Route path="/company/drives/:id" element={<CompanyDriveDetails />} />
+              <Route path="/company/drives/:id/applications" element={<ViewApplications />} />
+              <Route path="/company/drives/:id/selections" element={<FinalSelections />} />
+              <Route path="/company/drives/:driveId/colleges/:collegeId" element={<CollegeDriveDetails />} />
+              <Route path="/company/colleges" element={<BrowseColleges />} />
               <Route path="/company/applications" element={<ModulePlaceholder title="Applications" />} />
               <Route path="/company/schedule" element={<ModulePlaceholder title="Schedule" />} />
               <Route path="/company/settings" element={<Settings />} />
@@ -93,9 +109,10 @@ const App = () => {
           <Route element={<ProtectedRoute allowedRoles={['COLLEGE']} />}>
             <Route element={<AppShell />}>
               <Route path="/college" element={<CollegeDashboard />} />
-              <Route path="/college/invitations" element={<ModulePlaceholder title="Invitations" />} />
-              <Route path="/college/drives" element={<ModulePlaceholder title="Drives" />} />
-              <Route path="/college/students" element={<ModulePlaceholder title="Students" />} />
+              <Route path="/college/invitations" element={<Invitations />} />
+              <Route path="/college/drives/:id" element={<CollegeDriveDetailsPage />} />
+              <Route path="/college/drives/:id/upload-students" element={<UploadStudents />} />
+              <Route path="/college/drives/:id/students" element={<ViewStudents />} />
               <Route path="/college/schedule" element={<ModulePlaceholder title="Schedule" />} />
               <Route path="/college/settings" element={<Settings />} />
             </Route>
