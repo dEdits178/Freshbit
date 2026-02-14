@@ -1,61 +1,118 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
-import ProtectedRoute from './components/auth/ProtectedRoute'
-import Login from './pages/auth/Login'
-import Register from './pages/auth/Register'
-import ForgotPassword from './pages/auth/ForgotPassword'
-import ResetPassword from './pages/auth/ResetPassword'
-import VerifyEmail from './pages/auth/VerifyEmail'
-import Settings from './pages/settings/Settings'
-import Unauthorized from './pages/errors/Unauthorized'
-import NotFound from './pages/errors/NotFound'
-
-const DashboardShell = ({ title }) => (
-  <div className="min-h-screen bg-slate-50 p-6">
-    <div className="mx-auto max-w-5xl rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h1 className="text-2xl font-semibold text-slate-900">{title}</h1>
-      <p className="mt-2 text-slate-600">Welcome to FreshBit.</p>
-    </div>
-  </div>
-)
-
-const AdminRoutes = () => <DashboardShell title="Admin Dashboard" />
-const CompanyRoutes = () => <DashboardShell title="Company Dashboard" />
-const CollegeRoutes = () => <DashboardShell title="College Dashboard" />
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import PublicLayout from './components/layout/PublicLayout';
+import AppShell from './components/layout/AppShell';
+import CommandPalette from './components/common/CommandPalette';
+import PageTransition from './components/common/PageTransition';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
+import VerifyEmail from './pages/auth/VerifyEmail';
+import Settings from './pages/settings/Settings';
+import Unauthorized from './pages/errors/Unauthorized';
+import NotFound from './pages/errors/NotFound';
+import Landing from './pages/public/Landing';
+import Features from './pages/public/Features';
+import Contact from './pages/public/Contact';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AllDrives from './pages/admin/AllDrives';
+import ManageColleges from './pages/admin/ManageColleges';
+import ManageCompanies from './pages/admin/ManageCompanies';
+import Analytics from './pages/admin/Analytics';
+import DriveDetails from './pages/admin/DriveDetails';
+import CompanyDashboard from './pages/dashboard/CompanyDashboard';
+import CollegeDashboard from './pages/dashboard/CollegeDashboard';
+import ModulePlaceholder from './pages/dashboard/ModulePlaceholder';
 
 const App = () => {
+  const location = useLocation();
+
   return (
-    <Routes>
-      {/* Public routes */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/verify-email" element={<VerifyEmail />} />
+    <>
+      <CommandPalette />
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route element={<PublicLayout />}>
+            <Route
+              path="/"
+              element={
+                <PageTransition>
+                  <Landing />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/features"
+              element={
+                <PageTransition>
+                  <Features />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <PageTransition>
+                  <Contact />
+                </PageTransition>
+              }
+            />
+          </Route>
 
-      {/* Protected routes */}
-      <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
-        <Route path="/admin/*" element={<AdminRoutes />} />
-      </Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
 
-      <Route element={<ProtectedRoute allowedRoles={['COMPANY']} />}>
-        <Route path="/company/*" element={<CompanyRoutes />} />
-      </Route>
+          <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
+            <Route element={<AppShell />}>
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/drives" element={<AllDrives />} />
+              <Route path="/admin/drives/:id" element={<DriveDetails />} />
+              <Route path="/admin/colleges" element={<ManageColleges />} />
+              <Route path="/admin/companies" element={<ManageCompanies />} />
+              <Route path="/admin/analytics" element={<Analytics />} />
+              <Route path="/admin/settings" element={<Settings />} />
+            </Route>
+          </Route>
 
-      <Route element={<ProtectedRoute allowedRoles={['COLLEGE']} />}>
-        <Route path="/college/*" element={<CollegeRoutes />} />
-      </Route>
+          <Route element={<ProtectedRoute allowedRoles={['COMPANY']} />}>
+            <Route element={<AppShell />}>
+              <Route path="/company" element={<CompanyDashboard />} />
+              <Route path="/company/drives" element={<ModulePlaceholder title="My Drives" />} />
+              <Route path="/company/colleges" element={<ModulePlaceholder title="Colleges" />} />
+              <Route path="/company/applications" element={<ModulePlaceholder title="Applications" />} />
+              <Route path="/company/schedule" element={<ModulePlaceholder title="Schedule" />} />
+              <Route path="/company/settings" element={<Settings />} />
+            </Route>
+          </Route>
 
-      {/* Settings (all authenticated users) */}
-      <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'COMPANY', 'COLLEGE']} />}>
-        <Route path="/settings" element={<Settings />} />
-      </Route>
+          <Route element={<ProtectedRoute allowedRoles={['COLLEGE']} />}>
+            <Route element={<AppShell />}>
+              <Route path="/college" element={<CollegeDashboard />} />
+              <Route path="/college/invitations" element={<ModulePlaceholder title="Invitations" />} />
+              <Route path="/college/drives" element={<ModulePlaceholder title="Drives" />} />
+              <Route path="/college/students" element={<ModulePlaceholder title="Students" />} />
+              <Route path="/college/schedule" element={<ModulePlaceholder title="Schedule" />} />
+              <Route path="/college/settings" element={<Settings />} />
+            </Route>
+          </Route>
 
-      {/* Error routes */}
-      <Route path="/unauthorized" element={<Unauthorized />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  )
-}
+          <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'COMPANY', 'COLLEGE']} />}>
+            <Route element={<AppShell />}>
+              <Route path="/settings" element={<Settings />} />
+            </Route>
+          </Route>
 
-export default App
+          <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AnimatePresence>
+    </>
+  );
+};
+
+export default App;

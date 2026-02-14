@@ -18,20 +18,17 @@ const authenticate = async (req, res, next) => {
       where: { id: payload.userId },
       select: {
         id: true,
-        name: true,
         email: true,
         role: true,
-        emailVerified: true,
-        isActive: true,
-        organizationName: true,
+        status: true,
+        verified: true,
         createdAt: true,
-        updatedAt: true,
-        lastLogin: true
+        updatedAt: true
       }
     })
 
-    if (!user || !user.isActive) {
-      const error = new Error('User not found')
+    if (!user || user.status !== 'APPROVED') {
+      const error = new Error('User not found or not approved')
       error.statusCode = 404
       throw error
     }
@@ -54,6 +51,12 @@ const authenticate = async (req, res, next) => {
 
 const authorize = (...roles) => {
   return (req, res, next) => {
+    console.log('🔐 Authorization Check:');
+    console.log('   Required roles:', roles);
+    console.log('   User exists:', !!req.user);
+    console.log('   User role:', req.user?.role);
+    console.log('   Roles includes user role:', roles.includes(req.user?.role));
+
     if (!req.user) {
       const error = new Error('Authentication required')
       error.statusCode = 401
@@ -61,11 +64,13 @@ const authorize = (...roles) => {
     }
 
     if (!roles.includes(req.user.role)) {
+      console.log('❌ Authorization FAILED - role mismatch');
       const error = new Error('Forbidden')
       error.statusCode = 403
       return next(error)
     }
 
+    console.log('✅ Authorization SUCCESS');
     next()
   }
 }

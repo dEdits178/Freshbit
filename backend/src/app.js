@@ -3,6 +3,7 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 
 const authRoutes = require('./routes/authRoutes')
+const adminRoutes = require('./routes/adminRoutes')
 const errorHandler = require('./middleware/errorHandler')
 
 const app = express()
@@ -31,12 +32,15 @@ app.get('/', (req, res) => {
     success: true,
     message: 'FreshBit API Running',
     version: '1.0.0',
-    stage: 'Phase 0A.1 - Production Auth Backend'
+    stage: 'Phase 10.2 - Admin Dashboard Backend'
   })
 })
 
 // Auth routes
 app.use('/api/auth', authRoutes)
+
+// Admin routes
+app.use('/api/admin', adminRoutes)
 
 // Core modules
 app.use('/api/drives', require('./modules/drive/drive.routes'))
